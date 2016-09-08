@@ -5,13 +5,14 @@ Vagrant.configure("2") do |config|
 
     # Forward ports
     config.vm.network :forwarded_port, guest: 22, host: 2226, id: "ssh"
+    config.vm.network :forwarded_port, guest: 5432, host: 5432, id: "postgresql"
     config.vm.network :forwarded_port, guest: 8000, host: 8000
     config.vm.network :forwarded_port, guest: 80, host: 8001
 
     # Allocate resources
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--ioapic", "on"]
-        vb.customize ["modifyvm", :id, "--memory", "1024"]
+        vb.customize ["modifyvm", :id, "--memory", "2048"]
         vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
 
