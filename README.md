@@ -1,4 +1,4 @@
-Development environment for [Protwis](https://github.com/protwis/protwis) using Vagrant and Puppet.
+Development environment for [Protwis/GPCRmd](https://github.com/gpcrmd) using Vagrant and Puppet.
 
 ### Instructions
 
@@ -18,7 +18,7 @@ Works on Linux, Mac, and Windows.
 [git]: http://git-scm.com
 [github]: http://www.bitbucket.org
 
-Install Vagrant, VirtualBox, and Git, and create a GitHub account (if you don't already have one).
+Install Vagrant, VirtualBox, and Git, and create a GitHub account (if you don't already have one) and ask for writing permissions to administrator (ismaelresp).
 
 Make sure you have the latest version of all three. On Ubuntu (and this may also apply to other Linux distros), the
 package manager installs an old version of Vagrant, so you will have to download and install the latest version from
@@ -30,19 +30,25 @@ the Vagrant website.
 
 Open up a terminal and type
 
-    git clone --recursive https://github.com/protwis/protwis_vagrant.git ~/protwis_vagrant
-    cd ~/protwis_vagrant
+    git clone --recursive https://github.com/gpcrmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
+    cd ~/gpcrmd_vagrant
 
-##### Fork the protwis repository
+##### Fork the protwis repository (only for external collaborators with read-only permissions)
 
-Go to https://github.com/protwis/protwis and click "Fork" in the top right corner
+Go to https://github.com/gpcrmd/gpcrmd and click "Fork" in the top right corner
 
 ##### Clone the forked repository
 
-Clone into the "shared" directory (replace your-username with your GitHub username)
+Clone into the "shared" directory (replace your-username with your read-only GitHub username)
 
-    cd ~/protwis_vagrant
-    git clone https://github.com/your-username/protwis.git shared/sites/protwis
+    cd ~/gpcrmd_vagrant
+    git clone https://github.com/your-username/gpcrmd.git shared/sites/protwis
+
+Or with writting permissions
+
+    cd ~/gpcrmd_vagrant
+    git clone https://github.com/gpcrmd.git shared/sites/protwis
+
 
 ##### Start the vagrant box
 
@@ -67,19 +73,24 @@ You're all set up. The webserver will now be accessible from http://localhost:80
 
 Open up a shell and type
 
-    git clone --recursive https://github.com/protwis/protwis_vagrant.git .\protwis_vagrant
+    git clone --recursive https://github.com/gpcrmd/gpcrmd_vagrant.git .\gpcrmd_vagrant
     cd .\protwis_vagrant
 
-##### Fork the protwis repository
+##### Fork the protwis repository (only for external collaborators with read-only permissions)
 
-Go to https://github.com/protwis/protwis and click "Fork" in the top right corner
+Go to https://github.com/gpcrmd/gpcrmd and click "Fork" in the top right corner
 
 ##### Clone the forked repository
 
-Clone into the "shared" directory (replace your-username with your GitHub username)
+Clone into the "shared" directory (replace your-username with your read-only GitHub username)
 
-    cd ~/protwis_vagrant
-    git clone https://github.com/your-username/protwis.git .\shared\sites\protwis
+    cd ~/gpcrmd_vagrant
+    git clone https://github.com/your-username/gpcrmd.git shared\sites\protwis
+
+Or with writting permissions
+
+    cd ~/gpcrmd_vagrant
+    git clone https://github.com/gpcrmd.git shared\sites\protwis
 
 ##### Start the vagrant box
 
@@ -110,7 +121,7 @@ machine will be instantly reflected on the server.
 
 To run django commands from the protwis directory, ssh into the VM, and use the "/env/bin/python3" command e.g
 
-    cd ~/protwis_vagrant/
+    cd ~/gpcrmd_vagrant/
     vagrant ssh
     cd /protwis/sites/protwis
     /env/bin/python3 manage.py check protein
