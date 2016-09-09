@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder "shared", "/protwis/", :owner => "vagrant"
 
     # copy puppet scripts to VM
-    config.vm.provision "file", source: "gpcrmd_puppet_modules", destination: "/protwis/conf/gpcrmd_puppet_modules"
+    config.vm.provision "file", source: "gpcrmd_puppet_modules", destination: "/protwis/conf/protwis_puppet_modules"
 
     # Enable the Puppet provisioner
     config.vm.provision :puppet do |puppet|
