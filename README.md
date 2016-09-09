@@ -26,28 +26,28 @@ the Vagrant website.
 
 #### Linux and Mac
 
-##### Clone the protwis_vagrant repository from GitHub
+##### Clone the gpcrmd_vagrant repository from GitHub
 
 Open up a terminal and type
 
-    git clone --recursive https://github.com/gpcrmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
+    git clone --recursive https://github.com/GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
     cd ~/gpcrmd_vagrant
 
-##### Fork the protwis repository (only for external collaborators with read-only permissions)
+##### Fork the gpcrdb repository (only for external collaborators with read-only permissions)
 
-Go to https://github.com/gpcrmd/gpcrmd and click "Fork" in the top right corner
+Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
 
-##### Clone the forked repository
+##### Clone the forked or the original repository (writing permission required)
 
 Clone into the "shared" directory (replace your-username with your read-only GitHub username)
 
     cd ~/gpcrmd_vagrant
-    git clone https://github.com/your-username/gpcrmd.git shared/sites/protwis
+    git clone https://github.com/your-username/gpcrdb.git shared/sites/protwis
 
 Or with writting permissions
 
     cd ~/gpcrmd_vagrant
-    git clone https://github.com/gpcrmd.git shared/sites/protwis
+    git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
 
 
 ##### Start the vagrant box
@@ -69,7 +69,7 @@ You're all set up. The webserver will now be accessible from http://localhost:80
 
 #### Windows
 
-##### Clone the protwis_vagrant repository from GitHub
+##### Clone the gpcrmd_vagrant repository from GitHub
 
 Open up a shell and type
 
@@ -78,19 +78,19 @@ Open up a shell and type
 
 ##### Fork the protwis repository (only for external collaborators with read-only permissions)
 
-Go to https://github.com/gpcrmd/gpcrmd and click "Fork" in the top right corner
+Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
 
-##### Clone the forked repository
+##### Clone the forked or the original repository (writing permission required)
 
 Clone into the "shared" directory (replace your-username with your read-only GitHub username)
 
     cd ~/gpcrmd_vagrant
-    git clone https://github.com/your-username/gpcrmd.git shared\sites\protwis
+    git clone https://github.com/your-username/gpcrdb.git shared\sites\protwis
 
 Or with writting permissions
 
     cd ~/gpcrmd_vagrant
-    git clone https://github.com/gpcrmd.git shared\sites\protwis
+    git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
 
 ##### Start the vagrant box
 
