@@ -59,12 +59,12 @@ This may take a few minutes
 ##### Download scripts and latest dump
 
     1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
-    2. Copy files in a new folder: 'shared/db/'.
+    2. Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 
 ##### Download example files
 
     1. Download from Dropbox/dbdesign/data the folder 'files'.
-    2. Copy 'files' in 'shared/'.
+    2. Copy 'files' into '~/gpcrmd_vagrant/shared/'.
     
 
 ##### Log into the vagrant VM
@@ -103,12 +103,12 @@ Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
 
 Clone into the "shared" directory (replace your-username with your read-only GitHub username)
 
-    cd ~/gpcrmd_vagrant
+    cd %HOMEPATH%\gpcrmd_vagrant
     git clone https://github.com/your-username/gpcrdb.git shared\sites\protwis
 
 Or with writting permissions
 
-    cd ~/gpcrmd_vagrant
+    cd %HOMEPATH%\gpcrmd_vagrant
     git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
 
 ##### Start the vagrant box
@@ -119,13 +119,13 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-    1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
-    2. Copy files in a new folder: 'shared/db/'.
+    1. Download from Dropbox\dbdesign\DESIGN\dumps\ 'prepare.sql' and 'protwis5.backup'.
+    2. Copy files into next folder: %HOMEPATH%\gpcrmd_vagrant\shared\db\ .
 
 ##### Download example files
 
-    1. Download from Dropbox/dbdesign/data the folder 'files'.
-    2. Copy 'files' in 'shared/'.
+    1. Download from Dropbox\dbdesign\data the folder 'files'.
+    2. Copy 'files' into %HOMEPATH%\gpcrmd_vagrant\shared\ .
 
 ##### Log into the vagrant VM
 
