@@ -56,9 +56,28 @@ This may take a few minutes
 
     vagrant up
 
+##### Download scripts and latest dump
+
+    1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
+    1. Copy files in a new folder: 'shared/db/'.
+
+##### Download example files
+
+    1. Download from Dropbox/dbdesign/data the folder 'files'.
+    1. Copy 'files' in 'shared/'.
+    
+
 ##### Log into the vagrant VM
 
     vagrant ssh
+
+
+#### Run scripts and restore database
+    Run following commands (type password 'protwis' when asked):
+
+    cd /protwis/db/
+    psql -U protwis -h localhost protwis < prepare.sql
+    pg_restore --verbose --clean -h localhost -U protwis -d protwis protwis5.backup
 
 ##### Start the built in Django development webserver
 
@@ -98,6 +117,16 @@ This may take a few minutes
 
     vagrant up
 
+##### Download scripts and latest dump
+
+    1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
+    1. Copy files in a new folder: 'shared/db/'.
+
+##### Download example files
+
+    1. Download from Dropbox/dbdesign/data the folder 'files'.
+    1. Copy 'files' in 'shared/'.
+
 ##### Log into the vagrant VM
 
 Use an SSH client, e.g. PuTTY, with the following settings
@@ -106,6 +135,13 @@ Use an SSH client, e.g. PuTTY, with the following settings
     port: 2226
     username: vagrant
     password: vagrant
+
+#### Run scripts and restore database
+    Run following commands (type password 'protwis' when asked):
+
+    cd /protwis/db/
+    psql -U protwis -h localhost protwis < prepare.sql
+    pg_restore --verbose --clean -h localhost -U protwis -d protwis protwis5.backup
 
 ##### Start the Django development webserver
 
