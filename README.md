@@ -59,12 +59,12 @@ This may take a few minutes
 ##### Download scripts and latest dump
 
     1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
-    1. Copy files in a new folder: 'shared/db/'.
+    2. Copy files in a new folder: 'shared/db/'.
 
 ##### Download example files
 
     1. Download from Dropbox/dbdesign/data the folder 'files'.
-    1. Copy 'files' in 'shared/'.
+    2. Copy 'files' in 'shared/'.
     
 
 ##### Log into the vagrant VM
@@ -120,12 +120,12 @@ This may take a few minutes
 ##### Download scripts and latest dump
 
     1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
-    1. Copy files in a new folder: 'shared/db/'.
+    2. Copy files in a new folder: 'shared/db/'.
 
 ##### Download example files
 
     1. Download from Dropbox/dbdesign/data the folder 'files'.
-    1. Copy 'files' in 'shared/'.
+    2. Copy 'files' in 'shared/'.
 
 ##### Log into the vagrant VM
 
