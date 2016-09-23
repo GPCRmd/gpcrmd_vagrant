@@ -58,13 +58,13 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-    1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and 'protwis5.backup'.
+    1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and the last dumpddmmyyyy.backup .
     2. Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 
 ##### Download example files
 
     1. Download from Dropbox/dbdesign/data the folder 'files'.
-    2. Copy 'files' into '~/gpcrmd_vagrant/shared/'.
+    2. Copy 'files' into '~/gpcrmd_vagrant/shared/sites/'.
     
 
 ##### Log into the vagrant VM
@@ -119,13 +119,13 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-    1. Download from Dropbox\dbdesign\DESIGN\dumps\ 'prepare.sql' and 'protwis5.backup'.
+    1. Download from Dropbox\dbdesign\DESIGN\dumps\ 'prepare.sql' and the last dumpddmmyyyy.backup .
     2. Copy files into next folder: %HOMEPATH%\gpcrmd_vagrant\shared\db\ .
 
 ##### Download example files
 
     1. Download from Dropbox\dbdesign\data the folder 'files'.
-    2. Copy 'files' into %HOMEPATH%\gpcrmd_vagrant\shared\ .
+    2. Copy 'files' into %HOMEPATH%\gpcrmd_vagrant\shared\sites\ .
 
 ##### Log into the vagrant VM
 
