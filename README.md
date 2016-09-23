@@ -77,7 +77,7 @@ This may take a few minutes
 
     cd /protwis/db/
     psql -U protwis -h localhost protwis < prepare.sql
-    pg_restore --verbose --clean -h localhost -U protwis -d protwis protwis5.backup
+    pg_restore --verbose -h localhost -U protwis -d protwis protwis5.backup
 
 ##### Start the built in Django development webserver
 
@@ -141,7 +141,7 @@ Use an SSH client, e.g. PuTTY, with the following settings
 
     cd /protwis/db/
     psql -U protwis -h localhost protwis < prepare.sql
-    pg_restore --verbose --clean -h localhost -U protwis -d protwis protwis5.backup
+    pg_restore --verbose -h localhost -U protwis -d protwis protwis5.backup
 
 ##### Start the Django development webserver
 
