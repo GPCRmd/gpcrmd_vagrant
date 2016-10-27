@@ -79,6 +79,81 @@ This may take a few minutes
     psql -U protwis -h localhost protwis < prepare.sql
     pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
 
+#### Install RDKit and OpenBabel in the VM
+     1. Install dependences:
+    
+         sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
+         sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
+         sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+         sudo apt-get install python3.4 python3.4-dev python3-tk
+         sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
+         sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+         
+     2. Install OpenBabel:
+     
+         sudo apt-get install openbabel
+         
+     3. Download and compile RDKit:
+     
+         cd /home/vagrant
+         wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+         tar -xvzf Release_2016_03_1.tar.gz
+         cd rdkit-Release_2016_03_1
+         export RDBASE=$(pwd)
+         export PYTHONPATH=$RDBASE:$PYTHONPATH
+         export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+         mkdir build
+         cd build
+         cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+         -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
+         -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+         -D PYTHON_EXECUTABLE=/env/bin/python3 \
+         -D RDK_BUILD_AVALON_SUPPORT=ON \
+         -D RDK_BUILD_INCHI_SUPPORT=ON \
+         -D RDK_BUILD_PYTHON_WRAPPERS=ON \
+         -D BOOST_ROOT=/usr/ \
+         -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+         -D RDK_INSTALL_INTREE=OFF ..
+     
+     4. Optional. Test the build:
+     
+         a. Replace 'python' command by '/env/bin/python':
+         
+             mkdir /home/vagrant/bin
+             ln -s /env/bin/python /home/vagrant/bin/python
+             export PATH=/home/vagrant/bin:$PATH
+             cd $RDBASE/build
+             
+         b. Run test:
+         
+             ctest
+             
+         c. Remove link:
+         
+             rm /home/vagrant/bin/python
+             
+         d. Log out from SSH session in order to clean PATH:
+         
+            exit
+            
+         e. Log into the vagrant VM:
+         
+            vagrant ssh
+     
+     5. Install RDKit:
+     
+         cd $RDBASE/build
+         sudo make -j2 install
+         sudo ldconfig
+         
+     6. Log out from SSH session in order to clean LD_LIBRARY_PATH:
+            
+         exit
+         
+     7. Log into the vagrant VM:
+     
+         vagrant ssh                  
+
 ##### Start the built in Django development webserver
 
     cd /protwis/sites/protwis
@@ -142,6 +217,82 @@ Use an SSH client, e.g. PuTTY, with the following settings
     cd /protwis/db/
     psql -U protwis -h localhost protwis < prepare.sql
     pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
+    
+#### Install RDKit and OpenBabel in the VM
+     1. Install dependences:
+    
+         sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
+         sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
+         sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+         sudo apt-get install python3.4 python3.4-dev python3-tk
+         sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
+         sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+         
+     2. Install OpenBabel:
+     
+         sudo apt-get install openbabel
+         
+     3. Download and compile RDKit:
+     
+         cd /home/vagrant
+         wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+         tar -xvzf Release_2016_03_1.tar.gz
+         cd rdkit-Release_2016_03_1
+         export RDBASE=$(pwd)
+         export PYTHONPATH=$RDBASE:$PYTHONPATH
+         export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+         mkdir build
+         cd build
+         cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+         -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
+         -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+         -D PYTHON_EXECUTABLE=/env/bin/python3 \
+         -D RDK_BUILD_AVALON_SUPPORT=ON \
+         -D RDK_BUILD_INCHI_SUPPORT=ON \
+         -D RDK_BUILD_PYTHON_WRAPPERS=ON \
+         -D BOOST_ROOT=/usr/ \
+         -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+         -D RDK_INSTALL_INTREE=OFF ..
+     
+     4. Optional. Test the build:
+     
+         a. Replace 'python' command by '/env/bin/python':
+         
+             mkdir /home/vagrant/bin
+             ln -s /env/bin/python /home/vagrant/bin/python
+             export PATH=/home/vagrant/bin:$PATH
+             cd $RDBASE/build
+             
+         b. Run test:
+         
+             ctest
+             
+         c. Remove link:
+         
+             rm /home/vagrant/bin/python
+             
+         d. Log out from SSH session in order to clean PATH:
+         
+            exit
+            
+         e. Log into the vagrant VM:
+         
+            vagrant ssh
+     
+     5. Install RDKit:
+     
+         cd $RDBASE/build
+         sudo make -j2 install
+         sudo ldconfig
+         
+     6. Log out from SSH session in order to clean LD_LIBRARY_PATH:
+            
+         exit
+         
+     7. Log into the vagrant VM:
+     
+         vagrant ssh
+         
 
 ##### Start the Django development webserver
 
