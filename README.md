@@ -58,13 +58,13 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-    1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and the last dumpddmmyyyy.backup .
-    2. Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
+1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and the last dumpddmmyyyy.backup .
+2. Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 
 ##### Download example files
 
-    1. Download from Dropbox/dbdesign/data the folder 'files'.
-    2. Copy 'files' into '~/gpcrmd_vagrant/shared/sites/'.
+1. Download from Dropbox/dbdesign/data the folder 'files'.
+2. Copy 'files' into '~/gpcrmd_vagrant/shared/sites/'.
     
 
 ##### Log into the vagrant VM
@@ -72,89 +72,143 @@ This may take a few minutes
     vagrant ssh
 
 
-#### Run scripts and restore database
-    Run following commands (type password 'protwis' when asked):
+##### Run scripts and restore database
+Run following commands (type password 'protwis' when asked):
 
     cd /protwis/db/
     psql -U protwis -h localhost protwis < prepare.sql
     pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
 
-#### Install RDKit and OpenBabel in the VM
-     1. Install dependences:
-    
-         sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
-         sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
-         sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-         sudo apt-get install python3.4 python3.4-dev python3-tk
-         sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
-         sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
-         
-     2. Install OpenBabel:
-     
-         sudo apt-get install openbabel
-         
-     3. Download and compile RDKit:
-     
-         cd /home/vagrant
-         wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
-         tar -xvzf Release_2016_03_1.tar.gz
-         cd rdkit-Release_2016_03_1
-         export RDBASE=$(pwd)
-         export PYTHONPATH=$RDBASE:$PYTHONPATH
-         export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
-         mkdir build
-         cd build
-         cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
-         -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
-         -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
-         -D PYTHON_EXECUTABLE=/env/bin/python3 \
-         -D RDK_BUILD_AVALON_SUPPORT=ON \
-         -D RDK_BUILD_INCHI_SUPPORT=ON \
-         -D RDK_BUILD_PYTHON_WRAPPERS=ON \
-         -D BOOST_ROOT=/usr/ \
-         -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
-         -D RDK_INSTALL_INTREE=OFF ..
-     
-     4. Optional. Test the build:
-     
-         a. Replace 'python' command by '/env/bin/python':
-         
-             mkdir /home/vagrant/bin
-             ln -s /env/bin/python /home/vagrant/bin/python
-             export PATH=/home/vagrant/bin:$PATH
-             cd $RDBASE/build
-             
-         b. Run test:
-         
-             ctest
-             
-         c. Remove link:
-         
-             rm /home/vagrant/bin/python
-             
-         d. Log out from SSH session in order to clean PATH:
-         
-            exit
-            
-         e. Log into the vagrant VM:
-         
-            vagrant ssh
-     
-     5. Install RDKit:
-     
-         cd $RDBASE/build
-         sudo make -j2 install
-         sudo ldconfig
-         
-     6. Log out from SSH session in order to clean LD_LIBRARY_PATH:
-            
-         exit
-         
-     7. Log into the vagrant VM:
-     
-         vagrant ssh                  
+##### Install RDKit and OpenBabel in the VM
+######1. Increase VM memory temporary:
+#######a. Stop vagrant VM:
 
-##### Start the built in Django development webserver
+From a new terminal:
+
+    cd ~/gpcrmd_vagrant
+    vagrant halt
+
+
+#######b. Edit Vagrantfile:
+
+Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 4096 MB at least:
+
+```
+# Allocate resources
+config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+-   vb.customize ["modifyvm", :id, "--memory", "2048"]
++   vb.customize ["modifyvm", :id, "--memory", "4096"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+end
+```
+
+Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
+
+#######c. Restart the VM and log into it:
+
+     vagrant up
+     vagrant ssh
+
+
+######2. Install dependences:
+    
+    sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
+    sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
+    sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+    sudo apt-get install python3.4 python3.4-dev python3-tk
+    sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
+    sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+         
+######2. Install OpenBabel:
+     
+    sudo apt-get install openbabel
+         
+######3. Download and compile RDKit:
+     
+    cd /home/vagrant
+    wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+    tar -xvzf Release_2016_03_1.tar.gz
+    cd rdkit-Release_2016_03_1
+    export RDBASE=$(pwd)
+    export PYTHONPATH=$RDBASE:$PYTHONPATH
+    export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+    mkdir build
+    cd build
+    cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+    -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
+    -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+    -D PYTHON_EXECUTABLE=/env/bin/python3 \
+    -D RDK_BUILD_AVALON_SUPPORT=ON \
+    -D RDK_BUILD_INCHI_SUPPORT=ON \
+    -D RDK_BUILD_PYTHON_WRAPPERS=ON \
+    -D BOOST_ROOT=/usr/ \
+    -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+    -D RDK_INSTALL_INTREE=OFF ..
+     
+######4. Optional. Test the build:
+     
+#######a. Replace 'python' command by '/env/bin/python':
+
+    mkdir /home/vagrant/bin
+    ln -s /env/bin/python /home/vagrant/bin/python
+    export PATH=/home/vagrant/bin:$PATH
+    cd $RDBASE/build
+             
+#######b. Run test:
+         
+    ctest
+             
+#######c. Remove link:
+         
+    rm /home/vagrant/bin/python
+             
+#######d. Log out from SSH session in order to clean PATH:
+         
+    exit
+            
+#######e. Log into the vagrant VM:
+         
+    vagrant ssh
+     
+######5. Install RDKit:
+     
+    cd $RDBASE/build
+    sudo make -j2 install
+    sudo ldconfig
+         
+######6. Log out from SSH session in order to clean LD_LIBRARY_PATH:
+            
+    exit
+         
+######7. Restore VM memory configuration:
+#######a. Stop vagrant VM:
+
+    vagrant halt
+
+
+#######b. Edit Vagrantfile:
+
+Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2048 MB or 
+the amount that you had previous to step 1:
+
+```
+# Allocate resources
+config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+-   vb.customize ["modifyvm", :id, "--memory", "4096"]
++   vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+end
+```
+
+######8. Restart the VM and log into it:
+
+     vagrant up
+     vagrant ssh
+                        
+
+###### Start the built in Django development webserver
 
     cd /protwis/sites/protwis
     /env/bin/python3 manage.py runserver 0.0.0.0:8000
@@ -194,13 +248,13 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-    1. Download from Dropbox\dbdesign\DESIGN\dumps\ 'prepare.sql' and the last dumpddmmyyyy.backup .
-    2. Copy files into next folder: %HOMEPATH%\gpcrmd_vagrant\shared\db\ .
+1. Download from Dropbox\dbdesign\DESIGN\dumps\ 'prepare.sql' and the last dumpddmmyyyy.backup .
+2. Copy files into next folder: %HOMEPATH%\gpcrmd_vagrant\shared\db\ .
 
 ##### Download example files
 
-    1. Download from Dropbox\dbdesign\data the folder 'files'.
-    2. Copy 'files' into %HOMEPATH%\gpcrmd_vagrant\shared\sites\ .
+1. Download from Dropbox\dbdesign\data the folder 'files'.
+2. Copy 'files' into %HOMEPATH%\gpcrmd_vagrant\shared\sites\ .
 
 ##### Log into the vagrant VM
 
@@ -211,88 +265,149 @@ Use an SSH client, e.g. PuTTY, with the following settings
     username: vagrant
     password: vagrant
 
-#### Run scripts and restore database
-    Run following commands (type password 'protwis' when asked):
+##### Run scripts and restore database
+Run following commands (type password 'protwis' when asked):
 
     cd /protwis/db/
     psql -U protwis -h localhost protwis < prepare.sql
     pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
     
-#### Install RDKit and OpenBabel in the VM
-     1. Install dependences:
+##### Install RDKit and OpenBabel in the VM
+######1. Increase VM memory temporary:
+#######a. Stop vagrant VM:
+
+From a new cmd.exe:
+
+    cd %HOMEPATH%\gpcrmd_vagrant
+    vagrant halt
+
+
+#######b. Edit Vagrantfile:
+
+Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 4096 MB at least:
+
+```
+# Allocate resources
+config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+-   vb.customize ["modifyvm", :id, "--memory", "2048"]
++   vb.customize ["modifyvm", :id, "--memory", "4096"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+end
+```
+
+Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
+
+#######c. Restart the VM and log into it:
+
+From a cmd.exe:
+
+    cd %HOMEPATH%\gpcrmd_vagrant
+    vagrant up
     
-         sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
-         sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
-         sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-         sudo apt-get install python3.4 python3.4-dev python3-tk
-         sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
-         sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+and open an SSH connection to Vagrant VM.
+
+
+######2. Install dependences:
+    
+    sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
+    sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
+    sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+    sudo apt-get install python3.4 python3.4-dev python3-tk
+    sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
+    sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
          
-     2. Install OpenBabel:
+######3. Install OpenBabel:
      
-         sudo apt-get install openbabel
+    sudo apt-get install openbabel
          
-     3. Download and compile RDKit:
+######4. Download and compile RDKit:
      
-         cd /home/vagrant
-         wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
-         tar -xvzf Release_2016_03_1.tar.gz
-         cd rdkit-Release_2016_03_1
-         export RDBASE=$(pwd)
-         export PYTHONPATH=$RDBASE:$PYTHONPATH
-         export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
-         mkdir build
-         cd build
-         cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
-         -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
-         -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
-         -D PYTHON_EXECUTABLE=/env/bin/python3 \
-         -D RDK_BUILD_AVALON_SUPPORT=ON \
-         -D RDK_BUILD_INCHI_SUPPORT=ON \
-         -D RDK_BUILD_PYTHON_WRAPPERS=ON \
-         -D BOOST_ROOT=/usr/ \
-         -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
-         -D RDK_INSTALL_INTREE=OFF ..
+    cd /home/vagrant
+    wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+    tar -xvzf Release_2016_03_1.tar.gz
+    cd rdkit-Release_2016_03_1
+    export RDBASE=$(pwd)
+    export PYTHONPATH=$RDBASE:$PYTHONPATH
+    export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+    mkdir build
+    cd build
+    cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+    -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
+    -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+    -D PYTHON_EXECUTABLE=/env/bin/python3 \
+    -D RDK_BUILD_AVALON_SUPPORT=ON \
+    -D RDK_BUILD_INCHI_SUPPORT=ON \
+    -D RDK_BUILD_PYTHON_WRAPPERS=ON \
+    -D BOOST_ROOT=/usr/ \
+    -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+    -D RDK_INSTALL_INTREE=OFF ..
      
-     4. Optional. Test the build:
+######5. Optional. Test the build:
      
-         a. Replace 'python' command by '/env/bin/python':
-         
-             mkdir /home/vagrant/bin
-             ln -s /env/bin/python /home/vagrant/bin/python
-             export PATH=/home/vagrant/bin:$PATH
-             cd $RDBASE/build
+#######a. Replace 'python' command by '/env/bin/python':
+
+    mkdir /home/vagrant/bin
+    ln -s /env/bin/python /home/vagrant/bin/python
+    export PATH=/home/vagrant/bin:$PATH
+    cd $RDBASE/build
              
-         b. Run test:
+#######b. Run test:
          
-             ctest
+    ctest
              
-         c. Remove link:
+#######c. Remove link:
          
-             rm /home/vagrant/bin/python
+    rm /home/vagrant/bin/python
              
-         d. Log out from SSH session in order to clean PATH:
+#######d. Log out from SSH session in order to clean PATH:
          
-            exit
+    exit
             
-         e. Log into the vagrant VM:
+#######e. Log into the vagrant VM:
          
-            vagrant ssh
+    vagrant ssh
      
-     5. Install RDKit:
+######6. Install RDKit:
      
-         cd $RDBASE/build
-         sudo make -j2 install
-         sudo ldconfig
+    cd $RDBASE/build
+    sudo make -j2 install
+    sudo ldconfig
          
-     6. Log out from SSH session in order to clean LD_LIBRARY_PATH:
+######7. Log out from SSH session in order to clean LD_LIBRARY_PATH:
             
-         exit
+    exit
          
-     7. Log into the vagrant VM:
-     
-         vagrant ssh
-         
+######8. Restore VM memory configuration:
+#######a. Stop vagrant VM:
+From a cmd.exe:
+
+    cd %HOMEPATH%\gpcrmd_vagrant
+    vagrant halt
+
+
+#######b. Edit Vagrantfile:
+
+Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2048 MB or 
+the amount that you had previous to step 1:
+
+```
+# Allocate resources
+config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+-   vb.customize ["modifyvm", :id, "--memory", "4096"]
++   vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+end
+```
+
+######9. Restart the VM and log into it:
+From a cmd.exe:
+
+    cd %HOMEPATH%\gpcrmd_vagrant
+    vagrant up
+    
+and open an SSH connection to Vagrant VM.
 
 ##### Start the Django development webserver
 
