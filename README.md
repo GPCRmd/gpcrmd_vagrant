@@ -91,14 +91,14 @@ From a new terminal:
 
 #######b. Edit Vagrantfile:
 
-Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 4096 MB at least:
+Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2560 MB at least:
 
 ```
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
 -   vb.customize ["modifyvm", :id, "--memory", "2048"]
-+   vb.customize ["modifyvm", :id, "--memory", "4096"]
++   vb.customize ["modifyvm", :id, "--memory", "2560"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
 end
 ```
@@ -120,11 +120,11 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
     sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
     sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
          
-######2. Install OpenBabel:
+######3. Install OpenBabel:
      
     sudo apt-get install openbabel
          
-######3. Download and compile RDKit:
+######4. Download and compile RDKit:
      
     cd /home/vagrant
     wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
@@ -146,30 +146,6 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
     -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
     -D RDK_INSTALL_INTREE=OFF ..
      
-######4. Optional. Test the build:
-     
-#######a. Replace 'python' command by '/env/bin/python':
-
-    mkdir /home/vagrant/bin
-    ln -s /env/bin/python /home/vagrant/bin/python
-    export PATH=/home/vagrant/bin:$PATH
-    cd $RDBASE/build
-             
-#######b. Run test:
-         
-    ctest
-             
-#######c. Remove link:
-         
-    rm /home/vagrant/bin/python
-             
-#######d. Log out from SSH session in order to clean PATH:
-         
-    exit
-            
-#######e. Log into the vagrant VM:
-         
-    vagrant ssh
      
 ######5. Install RDKit:
      
@@ -177,7 +153,7 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
     sudo make -j2 install
     sudo ldconfig
          
-######6. Log out from SSH session in order to clean LD_LIBRARY_PATH:
+######6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
             
     exit
          
@@ -196,7 +172,7 @@ the amount that you had previous to step 1:
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
--   vb.customize ["modifyvm", :id, "--memory", "4096"]
+-   vb.customize ["modifyvm", :id, "--memory", "2560"]
 +   vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
 end
@@ -206,7 +182,33 @@ end
 
      vagrant up
      vagrant ssh
-                        
+
+######9. Optional. Test the installation:
+     
+#######a. Replace 'python' command by '/env/bin/python3':
+
+    mkdir /home/vagrant/bin
+    ln -s /env/bin/python3 /home/vagrant/bin/python
+    export PATH=/home/vagrant/bin:$PATH
+    
+             
+#######b. Run test:
+
+    export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
+    cd $RDBASE/build
+    ctest
+             
+#######c. Remove link:
+         
+    rm /home/vagrant/bin/python
+             
+#######d. Log out from SSH session in order to clean PATH:
+         
+    exit
+            
+#######e. Log into the vagrant VM:
+         
+    vagrant ssh
 
 ###### Start the built in Django development webserver
 
@@ -284,14 +286,14 @@ From a new cmd.exe:
 
 #######b. Edit Vagrantfile:
 
-Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 4096 MB at least:
+Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2560 MB at least:
 
 ```
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
 -   vb.customize ["modifyvm", :id, "--memory", "2048"]
-+   vb.customize ["modifyvm", :id, "--memory", "4096"]
++   vb.customize ["modifyvm", :id, "--memory", "2560"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
 end
 ```
@@ -343,42 +345,17 @@ and open an SSH connection to Vagrant VM.
     -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
     -D RDK_INSTALL_INTREE=OFF ..
      
-######5. Optional. Test the build:
-     
-#######a. Replace 'python' command by '/env/bin/python':
-
-    mkdir /home/vagrant/bin
-    ln -s /env/bin/python /home/vagrant/bin/python
-    export PATH=/home/vagrant/bin:$PATH
-    cd $RDBASE/build
-             
-#######b. Run test:
-         
-    ctest
-             
-#######c. Remove link:
-         
-    rm /home/vagrant/bin/python
-             
-#######d. Log out from SSH session in order to clean PATH:
-         
-    exit
-            
-#######e. Log into the vagrant VM:
-         
-    vagrant ssh
-     
-######6. Install RDKit:
+######5. Install RDKit:
      
     cd $RDBASE/build
     sudo make -j2 install
     sudo ldconfig
          
-######7. Log out from SSH session in order to clean LD_LIBRARY_PATH:
+######6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
             
     exit
          
-######8. Restore VM memory configuration:
+######7. Restore VM memory configuration:
 #######a. Stop vagrant VM:
 From a cmd.exe:
 
@@ -395,19 +372,46 @@ the amount that you had previous to step 1:
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
--   vb.customize ["modifyvm", :id, "--memory", "4096"]
+-   vb.customize ["modifyvm", :id, "--memory", "2560"]
 +   vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
 end
 ```
 
-######9. Restart the VM and log into it:
+######8. Restart the VM and log into it:
 From a cmd.exe:
 
     cd %HOMEPATH%\gpcrmd_vagrant
     vagrant up
     
 and open an SSH connection to Vagrant VM.
+
+######9. Optional. Test the installation:
+     
+#######a. Replace 'python' command by '/env/bin/python3':
+
+    mkdir /home/vagrant/bin
+    ln -s /env/bin/python3 /home/vagrant/bin/python
+    export PATH=/home/vagrant/bin:$PATH
+    cd $RDBASE/build
+             
+#######b. Run test:
+         
+    export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
+    cd $RDBASE/build
+    ctest
+             
+#######c. Remove link:
+         
+    rm /home/vagrant/bin/python
+             
+#######d. Log out from SSH session in order to clean PATH:
+         
+    exit
+            
+#######e. Log into the vagrant VM:
+         
+    vagrant ssh
 
 ##### Start the Django development webserver
 
