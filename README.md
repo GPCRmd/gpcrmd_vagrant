@@ -58,13 +58,18 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-1. Download from https://github.com/GPCRmd/gpcrmd_data/tree/master/dbdumps 'prepare.sql' and the last dumpddmmyyyy.backup .
-2. Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
+2.  Copy files into next folder: '%HOMEPATH%\gpcrmd_vagrant\shared\db\'.
 
 ##### Download example files
 
-1. Download from Dropbox/dbdesign/data the folder 'files'.
-2. Copy 'files' into '~/gpcrmd_vagrant/shared/sites/'.
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
+2.  Extract 'files.tar.gz' into '%HOMEPATH%\gpcrmd_vagrant\shared\sites\'.
+
+For extracting .tar.gz files in Windows you can use 7zip software http://www.7-zip.org/.
+
+
+
     
 
 ##### Log into the vagrant VM
@@ -80,8 +85,8 @@ Run following commands (type password 'protwis' when asked):
     pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
 
 ##### Install RDKit and OpenBabel in the VM
-######1. Increase VM memory temporary:
-#######a. Stop vagrant VM:
+######  1. Increase VM memory temporary:
+####### a. Stop vagrant VM:
 
 From a new terminal:
 
@@ -89,7 +94,7 @@ From a new terminal:
     vagrant halt
 
 
-#######b. Edit Vagrantfile:
+####### b. Edit Vagrantfile:
 
 Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2560 MB at least:
 
@@ -105,13 +110,13 @@ end
 
 Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
 
-#######c. Restart the VM and log into it:
+####### c. Restart the VM and log into it:
 
      vagrant up
      vagrant ssh
 
 
-######2. Install dependences:
+######  2. Install dependences:
     
     sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
     sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
@@ -120,11 +125,11 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
     sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
     sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
          
-######3. Install OpenBabel:
+######  3. Install OpenBabel:
      
     sudo apt-get install openbabel
          
-######4. Download and compile RDKit:
+######  4. Download and compile RDKit:
      
     cd /home/vagrant
     wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
@@ -147,23 +152,23 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
     -D RDK_INSTALL_INTREE=OFF ..
      
      
-######5. Install RDKit:
+######  5. Install RDKit:
      
     cd $RDBASE/build
     sudo make -j2 install
     sudo ldconfig
          
-######6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
+######  6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
             
     exit
          
-######7. Restore VM memory configuration:
-#######a. Stop vagrant VM:
+######  7. Restore VM memory configuration:
+####### a. Stop vagrant VM:
 
     vagrant halt
 
 
-#######b. Edit Vagrantfile:
+####### b. Edit Vagrantfile:
 
 Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2048 MB or 
 the amount that you had previous to step 1:
@@ -178,35 +183,35 @@ config.vm.provider :virtualbox do |vb|
 end
 ```
 
-######8. Restart the VM and log into it:
+######  8. Restart the VM and log into it:
 
      vagrant up
      vagrant ssh
 
-######9. Optional. Test the installation:
+######  9. Optional. Test the installation:
      
-#######a. Replace 'python' command by '/env/bin/python3':
+####### a. Replace 'python' command by '/env/bin/python3':
 
     mkdir /home/vagrant/bin
     ln -s /env/bin/python3 /home/vagrant/bin/python
     export PATH=/home/vagrant/bin:$PATH
     
              
-#######b. Run test:
+####### b. Run test:
 
     export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
     cd $RDBASE/build
     ctest
              
-#######c. Remove link:
+####### c. Remove link:
          
     rm /home/vagrant/bin/python
              
-#######d. Log out from SSH session in order to clean PATH:
+####### d. Log out from SSH session in order to clean PATH:
          
     exit
             
-#######e. Log into the vagrant VM:
+####### e. Log into the vagrant VM:
          
     vagrant ssh
 
@@ -248,15 +253,20 @@ This may take a few minutes
 
     vagrant up
 
+
 ##### Download scripts and latest dump
 
-1. Download from https://github.com/GPCRmd/gpcrmd_data/tree/master/dbdumps 'prepare.sql' and the last dumpddmmyyyy.backup .
-2. Copy files into next folder: %HOMEPATH%\gpcrmd_vagrant\shared\db\ .
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
+2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 
 ##### Download example files
 
-1. Download from Dropbox\dbdesign\data the folder 'files'.
-2. Copy 'files' into %HOMEPATH%\gpcrmd_vagrant\shared\sites\ .
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
+2.  Extract files.tar.gz into '~/gpcrmd_vagrant/shared/sites/':
+
+```
+tar -xvzf your/download/folder/files.tar.gz -C ~/gpcrmd_vagrant/shared/sites/
+```
 
 ##### Log into the vagrant VM
 
@@ -275,8 +285,9 @@ Run following commands (type password 'protwis' when asked):
     pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
     
 ##### Install RDKit and OpenBabel in the VM
-######1. Increase VM memory temporary:
-#######a. Stop vagrant VM:
+
+######  1. Increase VM memory temporary:
+####### a. Stop vagrant VM:
 
 From a new cmd.exe:
 
@@ -284,7 +295,7 @@ From a new cmd.exe:
     vagrant halt
 
 
-#######b. Edit Vagrantfile:
+####### b. Edit Vagrantfile:
 
 Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2560 MB at least:
 
@@ -300,7 +311,7 @@ end
 
 Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
 
-#######c. Restart the VM and log into it:
+####### c. Restart the VM and log into it:
 
 From a cmd.exe:
 
@@ -310,7 +321,7 @@ From a cmd.exe:
 and open an SSH connection to Vagrant VM.
 
 
-######2. Install dependences:
+######  2. Install dependences:
     
     sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
     sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
@@ -319,11 +330,11 @@ and open an SSH connection to Vagrant VM.
     sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
     sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
          
-######3. Install OpenBabel:
+######  3. Install OpenBabel:
      
     sudo apt-get install openbabel
          
-######4. Download and compile RDKit:
+######  4. Download and compile RDKit:
      
     cd /home/vagrant
     wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
@@ -345,25 +356,25 @@ and open an SSH connection to Vagrant VM.
     -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
     -D RDK_INSTALL_INTREE=OFF ..
      
-######5. Install RDKit:
+######  5. Install RDKit:
      
     cd $RDBASE/build
     sudo make -j2 install
     sudo ldconfig
          
-######6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
+######  6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
             
     exit
          
-######7. Restore VM memory configuration:
-#######a. Stop vagrant VM:
+######  7. Restore VM memory configuration:
+####### a. Stop vagrant VM:
 From a cmd.exe:
 
     cd %HOMEPATH%\gpcrmd_vagrant
     vagrant halt
 
 
-#######b. Edit Vagrantfile:
+####### b. Edit Vagrantfile:
 
 Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2048 MB or 
 the amount that you had previous to step 1:
@@ -378,7 +389,7 @@ config.vm.provider :virtualbox do |vb|
 end
 ```
 
-######8. Restart the VM and log into it:
+######  8. Restart the VM and log into it:
 From a cmd.exe:
 
     cd %HOMEPATH%\gpcrmd_vagrant
@@ -386,30 +397,30 @@ From a cmd.exe:
     
 and open an SSH connection to Vagrant VM.
 
-######9. Optional. Test the installation:
+######  9. Optional. Test the installation:
      
-#######a. Replace 'python' command by '/env/bin/python3':
+####### a. Replace 'python' command by '/env/bin/python3':
 
     mkdir /home/vagrant/bin
     ln -s /env/bin/python3 /home/vagrant/bin/python
     export PATH=/home/vagrant/bin:$PATH
     cd $RDBASE/build
              
-#######b. Run test:
+####### b. Run test:
          
     export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
     cd $RDBASE/build
     ctest
              
-#######c. Remove link:
+####### c. Remove link:
          
     rm /home/vagrant/bin/python
              
-#######d. Log out from SSH session in order to clean PATH:
+####### d. Log out from SSH session in order to clean PATH:
          
     exit
             
-#######e. Log into the vagrant VM:
+####### e. Log into the vagrant VM:
          
     vagrant ssh
 
