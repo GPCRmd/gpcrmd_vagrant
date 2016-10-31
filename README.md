@@ -58,7 +58,7 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-1. Download from Dropbox/dbdesign/DESIGN/dumps/ 'prepare.sql' and the last dumpddmmyyyy.backup .
+1. Download from https://github.com/GPCRmd/gpcrmd_data/tree/master/dbdumps 'prepare.sql' and the last dumpddmmyyyy.backup .
 2. Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 
 ##### Download example files
@@ -250,7 +250,7 @@ This may take a few minutes
 
 ##### Download scripts and latest dump
 
-1. Download from Dropbox\dbdesign\DESIGN\dumps\ 'prepare.sql' and the last dumpddmmyyyy.backup .
+1. Download from https://github.com/GPCRmd/gpcrmd_data/tree/master/dbdumps 'prepare.sql' and the last dumpddmmyyyy.backup .
 2. Copy files into next folder: %HOMEPATH%\gpcrmd_vagrant\shared\db\ .
 
 ##### Download example files
