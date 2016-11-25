@@ -450,3 +450,11 @@ following settings
     Server: localhost
     Username: protwis
     Password: protwis
+
+##### Installing haystack
+
+1. sudo apt-get install solr-jetty
+2. sudo /env/bin/pip3 install pysolr==3.6 django-haystack==2.5
+
+3. sudo vim /etc/default/jetty #(port=8983, ON_START=0)
+4. sudo /usr/share/solr
