@@ -457,14 +457,14 @@ following settings
 2. sudo /env/bin/pip3 install pysolr==3.6 django-haystack==2.5
 
 3. sudo vim /etc/default/jetty #(port=8983, ON_START=0)
-   sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
-4. sudo vim /usr/share/solr/solr.xml
-5. sudo mkdir /var/lib/solr/collection_gpcrmd
-   sudo chmod 750 /var/lib/solr/collection_gpcrmd
-   sudo chown jetty /var/lib/solr/collection_gpcrmd
-6. sudo mkdir /var/lib/solr/collection_gpcrmd/data
-   sudo chmod 750 /var/lib/solr/collection_gpcrmd/data
-   sudo chown jetty /var/lib/solr/collection_gpcrmd/data
-7. sudo ln -s /protwis/sites/protwis/solr/collection_gpcrmd/conf /var/lib/solr/collection_gpcrmd/conf
-8. cd /protwis/sites/protwis
-   /env/bin/python3 manage.py rebuild_index
+4. sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
+5. sudo vim /usr/share/solr/solr.xml
+6. sudo mkdir /var/lib/solr/collection_gpcrmd
+7. sudo chmod 750 /var/lib/solr/collection_gpcrmd
+8. sudo chown jetty /var/lib/solr/collection_gpcrmd
+9. sudo mkdir /var/lib/solr/collection_gpcrmd/data
+10. sudo chmod 750 /var/lib/solr/collection_gpcrmd/data
+11. sudo chown jetty /var/lib/solr/collection_gpcrmd/data
+12. sudo ln -s /protwis/sites/protwis/solr/collection_gpcrmd/conf /var/lib/solr/collection_gpcrmd/conf
+13. cd /protwis/sites/protwis
+14. /env/bin/python3 manage.py rebuild_index
