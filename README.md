@@ -452,19 +452,52 @@ following settings
     Password: protwis
 
 ##### Installing haystack
+Haystack provides modular search for Django. It features a unified, familiar API that allows you to plug in different search backends (such as Solr, Elasticsearch, Whoosh, Xapian, etc.).
 
-1. sudo apt-get install solr-jetty
-2. sudo /env/bin/pip3 install pysolr==3.6 django-haystack==2.5
+It is required for our query search engine. Run the following steps in a VM terminal (e.g. vagrant ssh) in order to setup Haystack:
 
-3. sudo vim /etc/default/jetty #(port=8983, ON_START=0)
-4. sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
-5. Replace /usr/share/solr/solr.xml by solr.xml from vagrant_gpcrmd.
-6. sudo mkdir /var/lib/solr/collection_gpcrmd
-7. sudo chmod 750 /var/lib/solr/collection_gpcrmd
-8. sudo chown jetty /var/lib/solr/collection_gpcrmd
-9. sudo mkdir /var/lib/solr/collection_gpcrmd/data
-10. sudo chmod 750 /var/lib/solr/collection_gpcrmd/data
-11. sudo chown jetty /var/lib/solr/collection_gpcrmd/data
-12. sudo ln -s /protwis/sites/protwis/solr/collection_gpcrmd/conf /var/lib/solr/collection_gpcrmd/conf
-13. cd /protwis/sites/protwis
-14. /env/bin/python3 manage.py rebuild_index
+1. Install Solr (search and indexing server) with Jetty (HTTP server):
+    ```
+    sudo apt-get install solr-jetty
+    ```
+
+2. Install Solr python wrapper (PySolr) and Haystack for django:
+    ```
+    sudo /env/bin/pip3 install pysolr==3.6 django-haystack==2.5
+    ```
+
+3. Edit the startup configuartion file of Jetty: 
+    ```
+    sudo vim /etc/default/jetty
+    ```
+
+   and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running on start up and setting the listening port that matches with Django.settings.
+   
+4. Bugfix for Ubuntu's logging bug (wrong location for the executable 'rotatelogs'):
+    ```
+    sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
+    ```
+
+5. Replace '/usr/share/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
+
+6. Setup directories for gpcrmd configuration files and the generated indexes. 
+    ```
+    sudo mkdir /var/lib/solr/collection_gpcrmd
+    sudo chmod 750 /var/lib/solr/collection_gpcrmd
+    sudo chown jetty /var/lib/solr/collection_gpcrmd
+    sudo mkdir /var/lib/solr/collection_gpcrmd/data
+    sudo chmod 750 /var/lib/solr/collection_gpcrmd/data
+    sudo chown jetty /var/lib/solr/collection_gpcrmd/data
+    sudo ln -s /protwis/sites/protwis/solr/collection_gpcrmd/conf /var/lib/solr/collection_gpcrmd/conf
+    ```
+
+7. Restart Jetty:
+    ```
+    sudo /etc/init.d/jetty restart
+    ```
+
+8. Build the Solr indexes from our models and database: 
+    ```
+    cd /protwis/sites/protwis
+    /env/bin/python3 manage.py rebuild_index
+    ```
