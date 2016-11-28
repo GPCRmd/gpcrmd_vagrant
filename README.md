@@ -458,7 +458,7 @@ following settings
 
 3. sudo vim /etc/default/jetty #(port=8983, ON_START=0)
 4. sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
-5. sudo vim /usr/share/solr/solr.xml
+5. Replace /usr/share/solr/solr.xml by solr.xml from vagrant_gpcrmd.
 6. sudo mkdir /var/lib/solr/collection_gpcrmd
 7. sudo chmod 750 /var/lib/solr/collection_gpcrmd
 8. sudo chown jetty /var/lib/solr/collection_gpcrmd
