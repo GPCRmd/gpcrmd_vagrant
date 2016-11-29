@@ -456,7 +456,7 @@ Haystack provides modular search for Django. It features a unified, familiar API
 
 It is required for our query search engine. Run the following steps in a VM terminal (e.g. vagrant ssh) in order to setup Haystack:
 
-1. Install Solr (search and indexing server) with Jetty (HTTP server):
+1. Install Solr (search and indexing server) with Jetty (apache2 manager):
     ```
     sudo apt-get install solr-jetty
     ```
@@ -466,12 +466,12 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo /env/bin/pip3 install pysolr==3.6 django-haystack==2.5
     ```
 
-3. Edit the startup configuartion file of Jetty: 
+3. Edit the startup configuration file of Jetty: 
     ```
     sudo vim /etc/default/jetty
     ```
 
-   and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running on start up and setting the listening port that matches with Django.settings.
+   and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running on start up and setting the listening port with the one that matches with Django.settings.
    
 4. Bugfix for Ubuntu's logging bug (wrong location for the executable 'rotatelogs'):
     ```
