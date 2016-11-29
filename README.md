@@ -478,7 +478,7 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
     ```
 
-5. Replace '/usr/share/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
+5. Replace '/etc/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
 
 6. Setup directories for gpcrmd configuration files and the generated indexes. 
     ```
