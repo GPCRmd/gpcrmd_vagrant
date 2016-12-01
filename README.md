@@ -473,7 +473,7 @@ It is required for our query search engine. Run the following steps in a VM term
 
    and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running as a service and setting the listening port with the one that matches with Django.settings.
    
-4. Jetty is configured for running on start up, but configuration are in the shared folder that is set up after Jetty start up. So, we have to disable jetty auto start up with the folowing command:
+4. Jetty is configured for running on startup, but configuration files are in a shared folder that sets up after Jetty startup. So, we have to disable jetty auto start up with the folowing command:
     ```
     sudo update-rc.d jetty disable
     ```
