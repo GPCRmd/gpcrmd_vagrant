@@ -471,16 +471,21 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo vim /etc/default/jetty
     ```
 
-   and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running on start up and setting the listening port with the one that matches with Django.settings.
+   and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running as a service and setting the listening port with the one that matches with Django.settings.
    
-4. Bugfix for Ubuntu's logging bug (wrong location for the executable 'rotatelogs'):
+4. Jetty is configured for running on start up, but configuration are in the shared folder that is set up after Jetty start up. So, we have to disable jetty auto start up with the folowing command:
+    ```
+    sudo update-rc.d jetty disable
+    ```
+   
+5. Bugfix for Ubuntu's logging bug (wrong location for the executable 'rotatelogs'):
     ```
     sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
     ```
 
-5. Replace '/etc/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
+6. Replace '/etc/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
 
-6. Setup directories for gpcrmd configuration files and the generated indexes. 
+7. Setup directories for gpcrmd configuration files and the generated indexes. 
     ```
     sudo mkdir /var/lib/solr/collection_gpcrmd
     sudo chmod 750 /var/lib/solr/collection_gpcrmd
@@ -491,12 +496,12 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo ln -s /protwis/sites/protwis/solr/collection_gpcrmd/conf /var/lib/solr/collection_gpcrmd/conf
     ```
 
-7. Restart Jetty:
+8. Restart Jetty:
     ```
     sudo /etc/init.d/jetty restart
     ```
 
-8. Build the Solr indexes from our models and database: 
+9. Build the Solr indexes from our models and database: 
     ```
     cd /protwis/sites/protwis
     /env/bin/python3 manage.py rebuild_index
