@@ -7,5 +7,7 @@ include bootstrap
 include tools
 include adminer
 include postgresql
+include solr
 include python
 include import_db
+include rdkit
