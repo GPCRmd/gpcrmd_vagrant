@@ -43,5 +43,11 @@ Vagrant.configure("2") do |config|
         puppet.manifest_file = "default.pp"
         puppet.module_path = "gpcrmd_puppet_modules"
     end
+    
+    # Start jetty
+    config.vm.provision "shell", run: "always" do |s|
+        s.inline = "/etc/init.d/jetty start"
+        s.privileged   = true
+    end
 
 end
