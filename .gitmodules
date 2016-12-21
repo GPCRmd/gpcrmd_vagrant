@@ -1,3 +1,4 @@
 [submodule "protwis_puppet_modules"]
 	path = gpcrmd_puppet_modules
 	url = https://github.com/GPCRmd/gpcrmd_puppet_modules.git
+	branch = dev
