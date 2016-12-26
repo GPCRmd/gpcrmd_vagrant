@@ -30,6 +30,11 @@ the Vagrant website.
 
 Open up a terminal and type
 
+    git clone --recursive git@github.com:GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
+    cd ~/gpcrmd_vagrant
+
+or
+
     git clone --recursive https://github.com/GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
     cd ~/gpcrmd_vagrant
 
@@ -59,14 +64,15 @@ This may take a few minutes
 ##### Download scripts and latest dump
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
-2.  Copy files into next folder: '%HOMEPATH%\gpcrmd_vagrant\shared\db\'.
+2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
+3.  In terminal run:
+
+    ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
 
 ##### Download example files
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
-2.  Extract 'files.tar.gz' into '%HOMEPATH%\gpcrmd_vagrant\shared\sites\'.
-
-For extracting .tar.gz files in Windows you can use 7zip software http://www.7-zip.org/.
+2.  Extract 'files.tar.gz' into '~/gpcrmd_vagrant/shared/sites/'.
 
 
 
@@ -77,12 +83,6 @@ For extracting .tar.gz files in Windows you can use 7zip software http://www.7-z
     vagrant ssh
 
 
-##### Run scripts and restore database
-Run following commands (type password 'protwis' when asked):
-
-    cd /protwis/db/
-    psql -U protwis -h localhost protwis < prepare.sql
-    pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
 
 ##### Install RDKit and OpenBabel in the VM
 ######  1. Increase VM memory temporary:
@@ -258,6 +258,7 @@ This may take a few minutes
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
 2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
+3.  Rename dumpddmmyyyy.backup to 'dump.backup'.
 
 ##### Download example files
 
@@ -277,12 +278,6 @@ Use an SSH client, e.g. PuTTY, with the following settings
     username: vagrant
     password: vagrant
 
-##### Run scripts and restore database
-Run following commands (type password 'protwis' when asked):
-
-    cd /protwis/db/
-    psql -U protwis -h localhost protwis < prepare.sql
-    pg_restore --verbose -h localhost -U protwis -d protwis dumpddmmyyyy.backup
     
 ##### Install RDKit and OpenBabel in the VM
 
