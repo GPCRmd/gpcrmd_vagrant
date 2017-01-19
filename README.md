@@ -480,7 +480,7 @@ It is required for our query search engine. Run the following steps in a VM term
 
 6. Replace '/etc/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
 
-7. Setup directories for gpcrmd configuration files and the generated indexes. 
+7. Setup directories for gpcrmd configuration files and the generated indexes. 1.
     ```
     sudo mkdir /var/lib/solr/collection_gpcrmd
     sudo chmod 750 /var/lib/solr/collection_gpcrmd
@@ -501,3 +501,72 @@ It is required for our query search engine. Run the following steps in a VM term
     cd /protwis/sites/protwis
     /env/bin/python3 manage.py rebuild_index
     ```
+
+##### Installing mdsrv and preparing apache WSGI for production
+
+0. Get the last version of the Vagrantfile. Type in your computer:
+
+    ```
+    cd ~/gpcrmd_vagrant/
+    git pull origin master
+    ```
+    
+1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, type in vagrant VM terminal:
+
+    ```
+    cd /protwis
+    tar -xvzf mdsrv-X.X.tar.gz # "mdsrv-X.X.tar.gz" is the name of the downloaded file
+    sudo mkdir -p /var/www/
+    sudo mv mdsrv* /var/www/mdsrv
+    cd /var/www/mdsrv
+    sudo /env/bin/python setup.py install
+    ```
+    
+2. Change permisions for "/var/www". Replace "www-data" (Debian) by your apache2 user (e.g "apache" for RedHat and CentOS). :
+    
+    ```
+    chgrp -R www-data /var/www/
+    chown -R g+rW /var/www/
+    chown -R g-w /var/www/
+    chown -R o-rwx /var/www/
+    ```
+    
+3. Create a simlink to mdsrv_static:
+
+    ```
+    sudo mv /var/www/html /var/www/html2 # An existent "/var/www/html" or "/var/www/html" is not necessary.
+    sudo ln -s /protwis/sites/protwis/mdsrv_static  /var/www/html
+    ```
+    
+4. Go to https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/master/apache/config/virtualhost and save the plain text web page into "~/gpcrmd_vagrant/shared". Then, type in vagrant VM terminal:
+
+   ```
+   cd /protwis
+   sudo mv virtualhost /etc/apache2/sites-available/000-default.conf # "virtualhost" is the name of the downloaded file 
+   ```
+   
+5. Configure apache2 to listen to ports 80 and 8081. Edit the file "/etc/apache2/ports.conf":
+
+   ```
+   sudo vi /etc/apache2/ports.conf
+   ```
+   
+   Write the following two lines if they are missing and save the file:
+   
+   ```
+   Listen 80
+   Listen 8081
+   ```
+   
+6. Restart apache2:
+
+   Debian:
+   
+   ```
+   sudo service apache2 restart
+   ```
+   RedHat/CentOS:
+   
+   ```
+   /etc/init.d/httpd restart
+   ```
