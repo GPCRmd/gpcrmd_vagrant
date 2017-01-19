@@ -84,7 +84,9 @@ ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
 2.  Extract 'files.tar.gz' into '~/gpcrmd_vagrant/shared/sites/'.
 
-
+```bash
+tar -xvzf your/download/folder/files.tar.gz -C ~/gpcrmd_vagrant/shared/sites/
+```
 
     
 
@@ -264,7 +266,7 @@ You're all set up. The webserver will now be accessible from http://localhost:80
 
 Open up a shell and type
 
-```bash
+```batch
 git clone --recursive https://github.com/gpcrmd/gpcrmd_vagrant.git .\gpcrmd_vagrant
 cd .\protwis_vagrant
 ```
@@ -306,11 +308,8 @@ vagrant up
 ##### Download example files
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
-2.  Extract files.tar.gz into '~/gpcrmd_vagrant/shared/sites/':
-
-```bash
-tar -xvzf your/download/folder/files.tar.gz -C ~/gpcrmd_vagrant/shared/sites/
-```
+2.  Extract files.tar.gz into '~/gpcrmd_vagrant/shared/sites/' with your favourite compression software.
+    We recommend [7-zip](http://www.7-zip.org/).
 
 ##### Log into the vagrant VM
 
@@ -585,12 +584,28 @@ It is required for our query search engine. Run the following steps in a VM term
 
 ##### Installing mdsrv and preparing apache WSGI for production
 
-0. Get the last version of the Vagrantfile. Run in your terminal computer:
-
+0. Get the last version of the Vagrantfile. Run in your computer terminal:
+    
+    Linux:
+    
     ```bash
     cd ~/gpcrmd_vagrant/
     git pull origin master
     ```
+    Windows:
+    
+    ```batch
+    cd %HOMEPATH%\gpcrmd_vagrant
+    git pull origin master
+    ```
+    
+    If changes have being made in Vagrantfile restart your vagrant VM:
+    
+    ```
+    vagrant halt
+    vagrant up
+    ```
+    
     
 1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, run in vagrant VM terminal:
 
