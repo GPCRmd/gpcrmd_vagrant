@@ -637,7 +637,7 @@ It is required for our query search engine. Run the following steps in a VM term
    
    Write the following two lines if they are missing and save the file:
    
-   ```
+   ```apache
    Listen 80
    Listen 8081
    ```
@@ -660,14 +660,14 @@ It is required for our query search engine. Run the following steps in a VM term
 
 1. Replace the following line in protwis/settings.py:
    
-```diff
-   try:
-       from protwis.settings_local import *
-   except ImportError:
--      from protwis.settings_local_development import *
-+      from protwis.settings_local_production import *  
-   
-```
+    ```diff
+       try:
+           from protwis.settings_local import *
+       except ImportError:
+    -      from protwis.settings_local_development import *
+    +      from protwis.settings_local_production import *  
+
+    ```
    
 2. Collect static files running the following commands in a in vagrant VM terminal:
 
