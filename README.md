@@ -599,7 +599,7 @@ It is required for our query search engine. Run the following steps in a VM term
     git pull origin master
     ```
     
-    If changes have being made in Vagrantfile restart your vagrant VM:
+    If changes have being made into Vagrantfile, restart your vagrant VM:
     
     ```
     vagrant halt
