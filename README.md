@@ -30,14 +30,17 @@ the Vagrant website.
 
 Open up a terminal and type
 
-    git clone --recursive git@github.com:GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
-    cd ~/gpcrmd_vagrant
-
+```bash
+git clone --recursive git@github.com:GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
+cd ~/gpcrmd_vagrant
+```
 or
 
-    git clone --recursive https://github.com/GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
-    cd ~/gpcrmd_vagrant
-
+```bash
+git clone --recursive https://github.com/GPCRmd/gpcrmd_vagrant.git ~/gpcrmd_vagrant
+cd ~/gpcrmd_vagrant
+```
+    
 ##### Fork the gpcrdb repository (only for external collaborators with read-only permissions)
 
 Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
@@ -45,29 +48,36 @@ Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
 ##### Clone the forked or the original repository (writing permission required)
 
 Clone into the "shared" directory (replace your-username with your read-only GitHub username)
-
-    cd ~/gpcrmd_vagrant
-    git clone https://github.com/your-username/gpcrdb.git shared/sites/protwis
+    
+```bash
+cd ~/gpcrmd_vagrant
+git clone https://github.com/your-username/gpcrdb.git shared/sites/protwis
+```
 
 Or with writting permissions
 
-    cd ~/gpcrmd_vagrant
-    git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
-
+```bash
+cd ~/gpcrmd_vagrant
+git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
+```
 
 ##### Start the vagrant box
 
 This may take a few minutes
 
-    vagrant up
-
+```bash
+vagrant up
+```
+    
 ##### Download scripts and latest dump
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
 2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 3.  In terminal run:
 
-    ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
+```bash
+ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
+```
 
 ##### Download example files
 
@@ -80,8 +90,9 @@ This may take a few minutes
 
 ##### Log into the vagrant VM
 
-    vagrant ssh
-
+```bash
+vagrant ssh
+```
 
 
 ##### Install RDKit and OpenBabel in the VM
@@ -90,9 +101,10 @@ This may take a few minutes
 
 From a new terminal:
 
-    cd ~/gpcrmd_vagrant
-    vagrant halt
-
+```bash
+cd ~/gpcrmd_vagrant
+vagrant halt
+```
 
 ####### b. Edit Vagrantfile:
 
@@ -111,69 +123,80 @@ end
 Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
 
 ####### c. Restart the VM and log into it:
-
-     vagrant up
-     vagrant ssh
-
+    
+```bash
+vagrant up
+vagrant ssh
+```
 
 ######  2. Install dependences:
     
-    sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
-    sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
-    sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-    sudo apt-get install python3.4 python3.4-dev python3-tk
-    sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
-    sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
-         
+```bash
+sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
+sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
+sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+sudo apt-get install python3.4 python3.4-dev python3-tk
+sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
+sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+```
+
 ######  3. Install OpenBabel:
-     
-    sudo apt-get install openbabel
-         
+
+```bash 
+sudo apt-get install openbabel
+```
+    
 ######  4. Download and compile RDKit:
-     
-    cd /home/vagrant
-    wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
-    tar -xvzf Release_2016_03_1.tar.gz
-    cd rdkit-Release_2016_03_1
-    export RDBASE=$(pwd)
-    export PYTHONPATH=$RDBASE:$PYTHONPATH
-    export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
-    mkdir build
-    cd build
-    cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
-    -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
-    -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
-    -D PYTHON_EXECUTABLE=/env/bin/python3 \
-    -D RDK_BUILD_AVALON_SUPPORT=ON \
-    -D RDK_BUILD_INCHI_SUPPORT=ON \
-    -D RDK_BUILD_PYTHON_WRAPPERS=ON \
-    -D BOOST_ROOT=/usr/ \
-    -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
-    -D RDK_INSTALL_INTREE=OFF ..
-     
+
+```bash
+cd /home/vagrant
+wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+tar -xvzf Release_2016_03_1.tar.gz
+cd rdkit-Release_2016_03_1
+export RDBASE=$(pwd)
+export PYTHONPATH=$RDBASE:$PYTHONPATH
+export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+mkdir build
+cd build
+cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+-D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
+-D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+-D PYTHON_EXECUTABLE=/env/bin/python3 \
+-D RDK_BUILD_AVALON_SUPPORT=ON \
+-D RDK_BUILD_INCHI_SUPPORT=ON \
+-D RDK_BUILD_PYTHON_WRAPPERS=ON \
+-D BOOST_ROOT=/usr/ \
+-D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+-D RDK_INSTALL_INTREE=OFF ..
+```
      
 ######  5. Install RDKit:
-     
-    cd $RDBASE/build
-    sudo make -j2 install
-    sudo ldconfig
+
+```bash
+cd $RDBASE/build
+sudo make -j2 install
+sudo ldconfig
+```
          
 ######  6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
-            
-    exit
-         
+
+```bash            
+exit
+```  
+    
 ######  7. Restore VM memory configuration:
 ####### a. Stop vagrant VM:
 
-    vagrant halt
-
+```bash
+vagrant halt
+```
 
 ####### b. Edit Vagrantfile:
 
 Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2048 MB or 
 the amount that you had previous to step 1:
 
-```
+```diff
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
@@ -185,41 +208,54 @@ end
 
 ######  8. Restart the VM and log into it:
 
-     vagrant up
-     vagrant ssh
-
+```bash
+ vagrant up
+ vagrant ssh
+```
+    
 ######  9. Optional. Test the installation:
      
 ####### a. Replace 'python' command by '/env/bin/python3':
 
-    mkdir /home/vagrant/bin
-    ln -s /env/bin/python3 /home/vagrant/bin/python
-    export PATH=/home/vagrant/bin:$PATH
-    
+```bash
+mkdir /home/vagrant/bin
+ln -s /env/bin/python3 /home/vagrant/bin/python
+export PATH=/home/vagrant/bin:$PATH
+```
              
 ####### b. Run test:
 
-    export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
-    cd $RDBASE/build
-    ctest
-             
+```bash
+export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
+cd $RDBASE/build
+ctest
+```
+    
 ####### c. Remove link:
-         
-    rm /home/vagrant/bin/python
-             
+    
+```bash
+rm /home/vagrant/bin/python
+```
+    
 ####### d. Log out from SSH session in order to clean PATH:
-         
-    exit
-            
-####### e. Log into the vagrant VM:
-         
-    vagrant ssh
+    
+```bash
+exit
+```
 
+####### e. Log into the vagrant VM:
+    
+```bash
+vagrant ssh
+```
+    
 ##### Start the built in Django development webserver
 
-    cd /protwis/sites/protwis
-    /env/bin/python3 manage.py runserver 0.0.0.0:8000
-
+```bash
+cd /protwis/sites/protwis
+/env/bin/python3 manage.py runserver 0.0.0.0:8000
+```
+    
 You're all set up. The webserver will now be accessible from http://localhost:8000
 
 #### Windows
@@ -228,9 +264,11 @@ You're all set up. The webserver will now be accessible from http://localhost:80
 
 Open up a shell and type
 
-    git clone --recursive https://github.com/gpcrmd/gpcrmd_vagrant.git .\gpcrmd_vagrant
-    cd .\protwis_vagrant
-
+```bash
+git clone --recursive https://github.com/gpcrmd/gpcrmd_vagrant.git .\gpcrmd_vagrant
+cd .\protwis_vagrant
+```
+    
 ##### Fork the protwis repository (only for external collaborators with read-only permissions)
 
 Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
@@ -239,21 +277,26 @@ Go to https://github.com/GPCRmd/gpcrdb and click "Fork" in the top right corner
 
 Clone into the "shared" directory (replace your-username with your read-only GitHub username)
 
-    cd %HOMEPATH%\gpcrmd_vagrant
-    git clone https://github.com/your-username/gpcrdb.git shared\sites\protwis
-
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+git clone https://github.com/your-username/gpcrdb.git shared\sites\protwis
+```
+    
 Or with writting permissions
 
-    cd %HOMEPATH%\gpcrmd_vagrant
-    git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
-
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
+```
+    
 ##### Start the vagrant box
 
 This may take a few minutes
 
-    vagrant up
-
-
+```bash
+vagrant up
+```
+    
 ##### Download scripts and latest dump
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
@@ -265,7 +308,7 @@ This may take a few minutes
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
 2.  Extract files.tar.gz into '~/gpcrmd_vagrant/shared/sites/':
 
-```
+```bash
 tar -xvzf your/download/folder/files.tar.gz -C ~/gpcrmd_vagrant/shared/sites/
 ```
 
@@ -286,15 +329,16 @@ Use an SSH client, e.g. PuTTY, with the following settings
 
 From a new cmd.exe:
 
-    cd %HOMEPATH%\gpcrmd_vagrant
-    vagrant halt
-
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+vagrant halt
+```
 
 ####### b. Edit Vagrantfile:
 
 Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2560 MB at least:
 
-```
+```diff
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
@@ -310,71 +354,84 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
 
 From a cmd.exe:
 
-    cd %HOMEPATH%\gpcrmd_vagrant
-    vagrant up
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+vagrant up
+```
     
 and open an SSH connection to Vagrant VM.
 
 
 ######  2. Install dependences:
+
+```bash
+sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
+sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
+sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+sudo apt-get install python3.4 python3.4-dev python3-tk
+sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
+sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+```
     
-    sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
-    sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
-    sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
-    sudo apt-get install python3.4 python3.4-dev python3-tk
-    sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
-    sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
-         
 ######  3. Install OpenBabel:
-     
-    sudo apt-get install openbabel
-         
+    
+```bash
+sudo apt-get install openbabel
+```
+    
 ######  4. Download and compile RDKit:
-     
-    cd /home/vagrant
-    wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
-    tar -xvzf Release_2016_03_1.tar.gz
-    cd rdkit-Release_2016_03_1
-    export RDBASE=$(pwd)
-    export PYTHONPATH=$RDBASE:$PYTHONPATH
-    export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
-    mkdir build
-    cd build
-    cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
-    -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
-    -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
-    -D PYTHON_EXECUTABLE=/env/bin/python3 \
-    -D RDK_BUILD_AVALON_SUPPORT=ON \
-    -D RDK_BUILD_INCHI_SUPPORT=ON \
-    -D RDK_BUILD_PYTHON_WRAPPERS=ON \
-    -D BOOST_ROOT=/usr/ \
-    -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
-    -D RDK_INSTALL_INTREE=OFF ..
-     
+
+```bash
+cd /home/vagrant
+wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+tar -xvzf Release_2016_03_1.tar.gz
+cd rdkit-Release_2016_03_1
+export RDBASE=$(pwd)
+export PYTHONPATH=$RDBASE:$PYTHONPATH
+export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+mkdir build
+cd build
+cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+-D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
+-D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+-D PYTHON_EXECUTABLE=/env/bin/python3 \
+-D RDK_BUILD_AVALON_SUPPORT=ON \
+-D RDK_BUILD_INCHI_SUPPORT=ON \
+-D RDK_BUILD_PYTHON_WRAPPERS=ON \
+-D BOOST_ROOT=/usr/ \
+-D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+-D RDK_INSTALL_INTREE=OFF ..
+```
+    
 ######  5. Install RDKit:
-     
-    cd $RDBASE/build
-    sudo make -j2 install
-    sudo ldconfig
-         
+
+```bash     
+cd $RDBASE/build
+sudo make -j2 install
+sudo ldconfig
+```
+    
 ######  6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
-            
-    exit
-         
+
+```bash            
+exit
+```
+    
 ######  7. Restore VM memory configuration:
 ####### a. Stop vagrant VM:
 From a cmd.exe:
 
-    cd %HOMEPATH%\gpcrmd_vagrant
-    vagrant halt
-
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+vagrant halt
+```
 
 ####### b. Edit Vagrantfile:
 
 Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2048 MB or 
 the amount that you had previous to step 1:
 
-```
+```diff
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
@@ -387,43 +444,57 @@ end
 ######  8. Restart the VM and log into it:
 From a cmd.exe:
 
-    cd %HOMEPATH%\gpcrmd_vagrant
-    vagrant up
-    
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+vagrant up
+```
+
 and open an SSH connection to Vagrant VM.
 
 ######  9. Optional. Test the installation:
      
 ####### a. Replace 'python' command by '/env/bin/python3':
 
-    mkdir /home/vagrant/bin
-    ln -s /env/bin/python3 /home/vagrant/bin/python
-    export PATH=/home/vagrant/bin:$PATH
-    cd $RDBASE/build
-             
+```bash
+mkdir /home/vagrant/bin
+ln -s /env/bin/python3 /home/vagrant/bin/python
+export PATH=/home/vagrant/bin:$PATH
+cd $RDBASE/build
+```
+    
 ####### b. Run test:
-         
-    export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
-    cd $RDBASE/build
-    ctest
-             
-####### c. Remove link:
-         
-    rm /home/vagrant/bin/python
-             
-####### d. Log out from SSH session in order to clean PATH:
-         
-    exit
-            
-####### e. Log into the vagrant VM:
-         
-    vagrant ssh
 
+```bash     
+export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
+cd $RDBASE/build
+ctest
+```
+    
+####### c. Remove link:
+
+```bash         
+rm /home/vagrant/bin/python
+```
+    
+####### d. Log out from SSH session in order to clean PATH:
+
+```bash         
+exit
+```
+    
+####### e. Log into the vagrant VM:
+
+```bash         
+vagrant ssh
+```
+    
 ##### Start the Django development webserver
 
-    cd /protwis/sites/protwis
-    /env/bin/python3 manage.py runserver 0.0.0.0:8000
-
+```bash
+cd /protwis/sites/protwis
+/env/bin/python3 manage.py runserver 0.0.0.0:8000
+```
+    
 You're all set up. The webserver will now be accessible from http://localhost:8000
 
 #### Other notes
@@ -433,11 +504,13 @@ machine will be instantly reflected on the server.
 
 To run django commands from the protwis directory, ssh into the VM, and use the "/env/bin/python3" command e.g
 
-    cd ~/gpcrmd_vagrant/
-    vagrant ssh
-    cd /protwis/sites/protwis
-    /env/bin/python3 manage.py check protein
-
+```bash
+cd ~/gpcrmd_vagrant/
+vagrant ssh
+cd /protwis/sites/protwis
+/env/bin/python3 manage.py check protein
+```
+    
 The database administration tool Adminer is installed and accessible at http://localhost:8001/adminer. Use the
 following settings
 
@@ -452,36 +525,42 @@ Haystack provides modular search for Django. It features a unified, familiar API
 It is required for our query search engine. Run the following steps in a VM terminal (e.g. vagrant ssh) in order to setup Haystack:
 
 1. Install Solr (search and indexing server) with Jetty (apache2 manager):
-    ```
+
+    ```bash
     sudo apt-get install solr-jetty
     ```
 
 2. Install Solr python wrapper (PySolr) and Haystack for django:
-    ```
+
+    ```bash
     sudo /env/bin/pip3 install pysolr==3.6 django-haystack==2.5
     ```
 
 3. Edit the startup configuration file of Jetty: 
-    ```
+
+    ```bash
     sudo vim /etc/default/jetty
     ```
 
    and set the following parameters 'NO_START=0'and JETTY_PORT=8983' for enabling running as a service and setting the listening port with the one that matches with Django.settings.
    
 4. Jetty is configured for running on startup, but configuration files are in a shared folder that sets up after Jetty startup. So, we have to disable jetty auto start up with the folowing command:
-    ```
+
+    ```bash
     sudo update-rc.d jetty disable
     ```
    
 5. Bugfix for Ubuntu's logging bug (wrong location for the executable 'rotatelogs'):
-    ```
+
+    ```bash
     sudo sed -i 's/^ROTATELOGS=.*$/ROTATELOGS=\/usr\/bin\/rotatelogs/' /etc/init.d/jetty
     ```
 
 6. Replace '/etc/solr/solr.xml' by 'solr.xml' from vagrant_gpcrmd.
 
 7. Setup directories for gpcrmd configuration files and the generated indexes. 1.
-    ```
+
+    ```bash
     sudo mkdir /var/lib/solr/collection_gpcrmd
     sudo chmod 750 /var/lib/solr/collection_gpcrmd
     sudo chown jetty /var/lib/solr/collection_gpcrmd
@@ -492,30 +571,33 @@ It is required for our query search engine. Run the following steps in a VM term
     ```
 
 8. Restart Jetty:
-    ```
+
+    ```bash
     sudo /etc/init.d/jetty restart
     ```
 
-9. Build the Solr indexes from our models and database: 
-    ```
+9. Build the Solr indexes from our models and database:
+
+    ```bash
     cd /protwis/sites/protwis
     /env/bin/python3 manage.py rebuild_index
     ```
 
 ##### Installing mdsrv and preparing apache WSGI for production
 
-0. Get the last version of the Vagrantfile. Type in your computer:
+0. Get the last version of the Vagrantfile. Run in your terminal computer:
 
-    ```
+    ```bash
     cd ~/gpcrmd_vagrant/
     git pull origin master
     ```
     
-1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, type in vagrant VM terminal:
+1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, run in vagrant VM terminal:
 
-    ```
+    ```bash
     cd /protwis
-    tar -xvzf mdsrv-X.X.tar.gz # "mdsrv-X.X.tar.gz" is the name of the downloaded file
+    tar -xvzf mdsrv-X.X.tar.gz 
+    # "mdsrv-X.X.tar.gz" is the name of the downloaded file
     sudo mkdir -p /var/www/
     sudo mv mdsrv* /var/www/mdsrv
     cd /var/www/mdsrv
@@ -524,7 +606,7 @@ It is required for our query search engine. Run the following steps in a VM term
     
 2. Change permisions for "/var/www". Replace "www-data" (Debian) by your apache2 user (e.g "apache" for RedHat and CentOS). :
     
-    ```
+    ```bash
     chgrp -R www-data /var/www/
     chown -R g+rW /var/www/
     chown -R g-w /var/www/
@@ -533,21 +615,23 @@ It is required for our query search engine. Run the following steps in a VM term
     
 3. Create a simlink to mdsrv_static:
 
-    ```
-    sudo mv /var/www/html /var/www/html2 # An existent "/var/www/html" or "/var/www/html" is not necessary.
+    ```bash
+    sudo mv /var/www/html /var/www/html2 
+    # An existent "/var/www/html" or "/var/www/html" is not necessary.
     sudo ln -s /protwis/sites/protwis/mdsrv_static  /var/www/html
     ```
     
-4. Go to https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/master/apache/config/virtualhost and save the plain text web page into "~/gpcrmd_vagrant/shared". Then, type in vagrant VM terminal:
+4. Go to https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/master/apache/config/virtualhost and save the plain text web page into "~/gpcrmd_vagrant/shared". Then, run in vagrant VM terminal:
 
-   ```
+   ```bash
    cd /protwis
-   sudo mv virtualhost /etc/apache2/sites-available/000-default.conf # "virtualhost" is the name of the downloaded file 
+   sudo mv virtualhost /etc/apache2/sites-available/000-default.conf 
+   # "virtualhost" is the name of the downloaded file 
    ```
    
 5. Configure apache2 to listen to ports 80 and 8081. Edit the file "/etc/apache2/ports.conf":
 
-   ```
+   ```bash
    sudo vi /etc/apache2/ports.conf
    ```
    
@@ -562,11 +646,45 @@ It is required for our query search engine. Run the following steps in a VM term
 
    Debian:
    
-   ```
+   ```bash
    sudo service apache2 restart
    ```
+   
    RedHat/CentOS:
    
+   ```bash
+   /etc/init.d/httpd restart
    ```
+   
+##### Setting up Django for production
+
+1. Replace the following line in protwis/settings.py:
+   
+```diff
+   try:
+       from protwis.settings_local import *
+   except ImportError:
+-      from protwis.settings_local_development import *
++      from protwis.settings_local_production import *  
+   
+```
+   
+2. Collect static files running the following commands in a in vagrant VM terminal:
+
+    ```bash
+    cd /protwis/sites/protwis/
+    /env/bin/python3 manage.py collectstatic --no-input
+    ```
+3. Restart apache2:
+
+   Debian:
+   
+   ```bash
+   sudo service apache2 restart
+   ```
+   
+   RedHat/CentOS:
+   
+   ```bash
    /etc/init.d/httpd restart
    ```
