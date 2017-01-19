@@ -33,7 +33,10 @@ Vagrant.configure("2") do |config|
     end
 
     # Set up a shared directory
-    config.vm.synced_folder "shared", "/protwis/", :owner => "vagrant"
+    config.vm.synced_folder "shared", "/protwis/", :owner => "vagrant",
+    group: "www-data",
+    mount_options: ["dmode=775,fmode=664"]
+
 
     # copy puppet scripts to VM
     config.vm.provision "file", source: "gpcrmd_puppet_modules", destination: "/protwis/conf/"
