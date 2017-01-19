@@ -110,7 +110,7 @@ vagrant halt
 
 Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2560 MB at least:
 
-```
+```diff
 # Allocate resources
 config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
