@@ -11,3 +11,4 @@ include solr
 include python
 include import_db
 include rdkit
+include mdsrv
