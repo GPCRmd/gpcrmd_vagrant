@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
 
 
     # copy puppet scripts to VM
-    config.vm.provision "file", source: "gpcrmd_puppet_modules", destination: "/protwis/conf/"
+    config.vm.provision "file", source: "gpcrmd_puppet_modules", destination: "/protwis/conf/protwis_puppet_modules"
 
     # Enable the Puppet provisioner
     config.vm.provision :puppet do |puppet|
