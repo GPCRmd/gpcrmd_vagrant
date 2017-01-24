@@ -610,13 +610,14 @@ It is required for our query search engine. Run the following steps in a VM term
 1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, run in vagrant VM terminal:
 
     ```bash
-    cd /protwis
-    tar -xvzf mdsrv-X.X.tar.gz 
-    # "mdsrv-X.X.tar.gz" is the name of the downloaded file
-    sudo mkdir -p /var/www/
-    sudo mv mdsrv* /var/www/mdsrv
+    tar -xvzf mdsrv.tar.gz -C /var/www/
+    mv /var/www/mdsrv* /var/www/mdsrv
+    chmod -R g+rX /var/www/mdsrv
     cd /var/www/mdsrv
-    sudo /env/bin/python setup.py install
+    /env/bin/python setup.py install
+    chgrp -R $1 /var/www/mdsrv
+    chmod -R g-w /var/www/mdsrv
+    chmod -R o-rwx /var/www/mdsrv
     ```
 2. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/app.cfg (click on "raw" button) and saved it into "/protwis".
 
