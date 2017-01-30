@@ -510,7 +510,7 @@ cd /protwis/sites/protwis
 /env/bin/python3 manage.py check protein
 ```
     
-The database administration tool Adminer is installed and accessible at http://localhost:8001/adminer. Use the
+The database administration tool Adminer is installed and accessible at http://localhost:8082/adminer. Use the
 following settings
 
     System: PostgreSQL
