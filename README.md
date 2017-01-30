@@ -610,25 +610,34 @@ It is required for our query search engine. Run the following steps in a VM term
 1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, run in vagrant VM terminal:
 
     ```bash
-    cd /protwis
-    tar -xvzf mdsrv-X.X.tar.gz 
-    # "mdsrv-X.X.tar.gz" is the name of the downloaded file
-    sudo mkdir -p /var/www/
-    sudo mv mdsrv* /var/www/mdsrv
+    tar -xvzf mdsrv.tar.gz -C /var/www/
+    mv /var/www/mdsrv* /var/www/mdsrv
+    chmod -R og+rX /var/www/mdsrv
     cd /var/www/mdsrv
-    sudo /env/bin/python setup.py install
+    /env/bin/python setup.py install
     ```
-    
-2. Change permisions for "/var/www". Replace "www-data" (Debian) by your apache2 user (e.g "apache" for RedHat and CentOS). :
+2. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/app.cfg (click on "raw" button) and saved it into "/protwis".
+
+3. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/mdsrv.wsgi (click on "raw" button) and saved it into "/protwis".
+
+4. Move the files downloaded in the previous two steps by running in vagrant VM terminal:
+
+    ```bash
+    sudo mv /protwis/app.cfg /var/www/mdsrv/
+    sudo mv /protwis/mdsrv.wsgi /var/www/mdsrv/
+    ```
+
+
+3. Change permisions for "/var/www". Replace "www-data" (Debian) by your apache2 user (e.g "apache" for RedHat and CentOS). :
     
     ```bash
     chgrp -R www-data /var/www/
-    chown -R g+rW /var/www/
+    chown -R g+rX /var/www/
     chown -R g-w /var/www/
     chown -R o-rwx /var/www/
     ```
     
-3. Create a simlink to mdsrv_static:
+4. Create a simlink to mdsrv_static:
 
     ```bash
     sudo mv /var/www/html /var/www/html2 
@@ -636,7 +645,7 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo ln -s /protwis/sites/protwis/mdsrv_static  /var/www/html
     ```
     
-4. Go to https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/master/apache/config/virtualhost and save the plain text web page into "~/gpcrmd_vagrant/shared". Then, run in vagrant VM terminal:
+5. Go to https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/master/apache/config/virtualhost and save the plain text web page into "~/gpcrmd_vagrant/shared". Then, run in vagrant VM terminal:
 
    ```bash
    cd /protwis
@@ -644,7 +653,7 @@ It is required for our query search engine. Run the following steps in a VM term
    # "virtualhost" is the name of the downloaded file 
    ```
    
-5. Configure apache2 to listen to ports 80 and 8081. Edit the file "/etc/apache2/ports.conf":
+6. Configure apache2 to listen to ports 80 and 8081. Edit the file "/etc/apache2/ports.conf":
 
    ```bash
    sudo vi /etc/apache2/ports.conf
@@ -657,7 +666,7 @@ It is required for our query search engine. Run the following steps in a VM term
    Listen 8081
    ```
    
-6. Restart apache2:
+7. Restart apache2:
 
    Debian:
    
