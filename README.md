@@ -632,9 +632,9 @@ It is required for our query search engine. Run the following steps in a VM term
     
     ```bash
     sudo chgrp -R www-data /var/www/
-    sudo chown -R g+rX /var/www/
-    sudo chown -R g-w /var/www/
-    sudo chown -R o-rwx /var/www/
+    sudo chmod -R g+rX /var/www/
+    sudo chmod -R g-w /var/www/
+    sudo chmod -R o-rwx /var/www/
     ```
     
 4. Create a simlink to mdsrv_static:
