@@ -610,11 +610,11 @@ It is required for our query search engine. Run the following steps in a VM term
 1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, run in vagrant VM terminal:
 
     ```bash
-    tar -xvzf mdsrv.tar.gz -C /var/www/
-    mv /var/www/mdsrv* /var/www/mdsrv
-    chmod -R og+rX /var/www/mdsrv
+    sudo tar -xvzf mdsrv.tar.gz -C /var/www/
+    sudo mv /var/www/mdsrv* /var/www/mdsrv
+    sudo chmod -R og+rX /var/www/mdsrv
     cd /var/www/mdsrv
-    /env/bin/python setup.py install
+    sudo /env/bin/python setup.py install
     ```
 2. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/app.cfg (click on "raw" button) and saved it into "/protwis".
 
@@ -631,10 +631,10 @@ It is required for our query search engine. Run the following steps in a VM term
 3. Change permisions for "/var/www". Replace "www-data" (Debian) by your apache2 user (e.g "apache" for RedHat and CentOS). :
     
     ```bash
-    chgrp -R www-data /var/www/
-    chown -R g+rX /var/www/
-    chown -R g-w /var/www/
-    chown -R o-rwx /var/www/
+    sudo chgrp -R www-data /var/www/
+    sudo chown -R g+rX /var/www/
+    sudo chown -R g-w /var/www/
+    sudo chown -R o-rwx /var/www/
     ```
     
 4. Create a simlink to mdsrv_static:
