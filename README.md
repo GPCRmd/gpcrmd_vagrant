@@ -363,6 +363,8 @@ and open an SSH connection to Vagrant VM.
 
 ######  2. Install dependences:
 
+Ubuntu:
+
 ```bash
 sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
 sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
@@ -371,12 +373,26 @@ sudo apt-get install python3.4 python3.4-dev python3-tk
 sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
 sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
 ```
+
+Centos 6.X+ with EPEL repository enabled:
+
+```bash
+yum install @"Development Tools"  cmake tk-devel readline-devel zlib-devel bzip2-devel sqlite-devel python34-devel
+```
+####### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
+
     
 ######  3. Install OpenBabel:
     
+Ubuntu:    
 ```bash
 sudo apt-get install openbabel
 ```
+ Centos 6.X+ with EPEL repository enabled:
+ ```bash
+yum install openbabel
+```
+ 
     
 ######  4. Download and compile RDKit:
 
@@ -390,7 +406,9 @@ export PYTHONPATH=$RDBASE:$PYTHONPATH
 export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
 mkdir build
 cd build
-cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+cmake -D CMAKE_CXX_COMPILER=g++ \
+-D CMAKE_C_COMPILER=gcc \
+-D RDK_BUILD_SWIG_WRAPPERS=OFF \
 -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
 -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
 -D PYTHON_EXECUTABLE=/env/bin/python3 \
@@ -401,6 +419,8 @@ cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
 -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
 -D RDK_INSTALL_INTREE=OFF ..
 ```
+For CentOS 6.X replace PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so by
+PYTHON_LIBRARY=/usr/lib64/libpython3.4m.so
     
 ######  5. Install RDKit:
 
