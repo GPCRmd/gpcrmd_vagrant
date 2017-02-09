@@ -132,23 +132,122 @@ vagrant ssh
 ```
 
 ######  2. Install dependences:
-    
+
+Ubuntu:
+
 ```bash
-sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
-sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
-sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev 
+sudo apt-get install zlib1g-dev tcl8.5-dev tk8.5-dev
 sudo apt-get install python3.4 python3.4-dev python3-tk
+# Boost library
+# libboost-python1.54-dev contains libraries for both python2 and python3
 sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
 sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+# For pip3 cairocffi:
+sudo apt-get install libffi6 libffi-dev libtiff4-dev libfreetype6-dev libjpeg8-dev liblcms2-dev libwebp-dev
+
 ```
+
+CentOS 6.X+ with EPEL repository enabled:
+
+```bash
+sudo yum install @"Development Tools"  cmake tk-devel readline-devel zlib-devel bzip2-devel sqlite-devel python34-devel
+# For pip3 cairocffi:
+sudo yum install libffi libffi-devel
+```
+CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from source.
+
+####### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
+1. Download Boost library 1.61.0: https://sourceforge.net/projects/boost/files/boost/1.61.0/
+2. Extract the boost_1_61_0 folder fromthe downloaded file:
+
+    ```bash
+    tar -jxvf boost_1_61_0.tar.bz2
+    ```
+        
+3. Configure build:
+        
+    ```bash
+    cd boost_1_61_0
+    ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization
+    ```
+        
+4. Add line the following line after 'import python;' (NOT inside the if body) in project-config.jam:
+
+    Ubuntu:
+
+    ```diff
+    # Python configuration
+    import python ;
+    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;'
+    if ! [ python.configured ]
+    {
+        using python : 3.4 : /env ;
+    }
+    ```
+        
+    CentOS 6.X:
+ 
+    ```diff
+    # Python configuration
+    import python ;
+    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib64/ ;'
+    if ! [ python.configured ]
+    {
+        using python : 3.4 : /env ;
+    }
+    ``` 
+ 
+5. Compile boost:
+    
+    ```bash
+    sudo ./b2 install -a cxxflags=-fPIC cflags=-fPIC # Flags for enabling shared and static linking
+    ```
+        
+6. Add libraries in "/usr/local/lib" to ldconfig (add line "/usr/local/lib" to /etc/ld.so.conf if necessary):
+   
+    ```bash
+        sudo ldconfig
+    ```
 
 ######  3. Install OpenBabel:
-
-```bash 
+    
+Ubuntu:    
+```bash
 sudo apt-get install openbabel
 ```
+ Centos 6.X+ with EPEL repository enabled:
+ ```bash
+yum install openbabel
+```
+
+######  4. Install pip packages dependences
+
+####### a. Install numpy:
+
+```bash
+sudo /env/bin/pip3 install numpy==1.11
+```
+
+####### b. Install cairo:
+
+
+```bash
+sudo /env/bin/pip3 install cairocffi
+```
+
+
+####### c. Install Pillow:
+
+
+```bash
+sudo /env/bin/pip3 install Pillow
+```
+
     
-######  4. Download and compile RDKit:
+######  5. Download and compile RDKit:
+
+Ubuntu with Boost C++ from repository:
 
 ```bash
 cd /home/vagrant
@@ -160,7 +259,9 @@ export PYTHONPATH=$RDBASE:$PYTHONPATH
 export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
 mkdir build
 cd build
-cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
+cmake -D CMAKE_CXX_COMPILER=g++ \
+-D CMAKE_C_COMPILER=gcc \
+-D RDK_BUILD_SWIG_WRAPPERS=OFF \
 -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
 -D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
 -D PYTHON_EXECUTABLE=/env/bin/python3 \
@@ -171,8 +272,35 @@ cmake -D RDK_BUILD_SWIG_WRAPPERS=OFF \
 -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
 -D RDK_INSTALL_INTREE=OFF ..
 ```
-     
-######  5. Install RDKit:
+
+CentOS 6.X with compiled libraries installed in /usr/local/lib and source in /usr/local/include:
+
+```bash
+cd /home/vagrant
+wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+tar -xvzf Release_2016_03_1.tar.gz
+cd rdkit-Release_2016_03_1
+export RDBASE=$(pwd)
+export PYTHONPATH=$RDBASE:$PYTHONPATH
+export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+mkdir build
+cd build
+cmake -D CMAKE_CXX_COMPILER=g++ \
+-D CMAKE_C_COMPILER=gcc \
+-D RDK_BUILD_SWIG_WRAPPERS=OFF \
+-D PYTHON_LIBRARY=/usr/lib64/libpython3.4m.so \
+-D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+-D PYTHON_EXECUTABLE=/env/bin/python3 \
+-D RDK_BUILD_AVALON_SUPPORT=ON \
+-D RDK_BUILD_INCHI_SUPPORT=ON \
+-D RDK_BUILD_PYTHON_WRAPPERS=ON \
+-D BOOST_ROOT=/usr/local/ \
+-D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+-D RDK_INSTALL_INTREE=OFF ..
+```
+Notice differences in PYTHON_LIBRARY and BOOST_ROOT variables.
+ 
+######  6. Install RDKit:
 
 ```bash
 cd $RDBASE/build
@@ -180,13 +308,13 @@ sudo make -j2 install
 sudo ldconfig
 ```
          
-######  6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
+######  7. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
 
 ```bash            
 exit
 ```  
     
-######  7. Restore VM memory configuration:
+######  8. Restore VM memory configuration:
 ####### a. Stop vagrant VM:
 
 ```bash
@@ -208,47 +336,33 @@ config.vm.provider :virtualbox do |vb|
 end
 ```
 
-######  8. Restart the VM and log into it:
+######  9. Restart the VM and log into it:
 
 ```bash
  vagrant up
  vagrant ssh
 ```
     
-######  9. Optional. Test the installation:
+######  10. Optional. Test the installation:
      
-####### a. Replace 'python' command by '/env/bin/python3':
+####### a. Activate python environment:
 
 ```bash
-mkdir /home/vagrant/bin
-ln -s /env/bin/python3 /home/vagrant/bin/python
-export PATH=/home/vagrant/bin:$PATH
+source /env/bin/activate
 ```
-             
+    
 ####### b. Run test:
 
-```bash
+```bash     
 export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
 cd $RDBASE/build
 ctest
 ```
     
-####### c. Remove link:
-    
-```bash
-rm /home/vagrant/bin/python
-```
-    
-####### d. Log out from SSH session in order to clean PATH:
-    
-```bash
-exit
-```
+####### c. Deactivate python environment:
 
-####### e. Log into the vagrant VM:
-    
-```bash
-vagrant ssh
+```bash         
+deactivate
 ```
     
 ##### Start the built in Django development webserver
@@ -366,22 +480,80 @@ and open an SSH connection to Vagrant VM.
 Ubuntu:
 
 ```bash
-sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev libffi6 libffi-dev
-sudo apt-get install libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev 
-sudo apt-get install liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev 
+sudo apt-get install zlib1g-dev tcl8.5-dev tk8.5-dev
 sudo apt-get install python3.4 python3.4-dev python3-tk
+# Boost library
+# libboost-python1.54-dev contains libraries for both python2 and python3
 sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
 sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
+# For pip3 cairocffi:
+sudo apt-get install libffi6 libffi-dev libtiff4-dev libfreetype6-dev libjpeg8-dev liblcms2-dev libwebp-dev
+
 ```
 
-Centos 6.X+ with EPEL repository enabled:
+CentOS 6.X+ with EPEL repository enabled:
 
 ```bash
-yum install @"Development Tools"  cmake tk-devel readline-devel zlib-devel bzip2-devel sqlite-devel python34-devel
+sudo yum install @"Development Tools"  cmake tk-devel readline-devel zlib-devel bzip2-devel sqlite-devel python34-devel
+# For pip3 cairocffi:
+sudo yum install libffi libffi-devel
 ```
-####### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
+CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from source.
 
+####### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
+1. Download Boost library 1.61.0: https://sourceforge.net/projects/boost/files/boost/1.61.0/
+2. Extract the boost_1_61_0 folder fromthe downloaded file:
+
+    ```bash
+    tar -jxvf boost_1_61_0.tar.bz2
+    ```
+        
+3. Configure build:
+        
+    ```bash
+    cd boost_1_61_0
+    ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization
+    ```
+        
+4. Add line the following line after 'import python;' (NOT inside the if body) in project-config.jam:
+
+    Ubuntu:
+
+    ```diff
+    # Python configuration
+    import python ;
+    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;'
+    if ! [ python.configured ]
+    {
+        using python : 3.4 : /env ;
+    }
+    ```
+        
+    CentOS 6.X:
+ 
+    ```diff
+    # Python configuration
+    import python ;
+    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib64/ ;'
+    if ! [ python.configured ]
+    {
+        using python : 3.4 : /env ;
+    }
+    ``` 
+ 
+5. Compile boost:
     
+    ```bash
+    sudo ./b2 install -a cxxflags=-fPIC cflags=-fPIC # Flags for enabling shared and static linking
+    ```
+        
+6. Add libraries in "/usr/local/lib" to ldconfig (add line "/usr/local/lib" to /etc/ld.so.conf if necessary):
+   
+    ```bash
+        sudo ldconfig
+    ```
+
 ######  3. Install OpenBabel:
     
 Ubuntu:    
@@ -392,9 +564,34 @@ sudo apt-get install openbabel
  ```bash
 yum install openbabel
 ```
- 
+
+######  4. Install pip packages dependences
+
+####### a. Install numpy:
+
+```bash
+sudo /env/bin/pip3 install numpy==1.11
+```
+
+####### b. Install cairo:
+
+
+```bash
+sudo /env/bin/pip3 install cairocffi
+```
+
+
+####### c. Install Pillow:
+
+
+```bash
+sudo /env/bin/pip3 install Pillow
+```
+
     
-######  4. Download and compile RDKit:
+######  5. Download and compile RDKit:
+
+Ubuntu with Boost C++ from repository:
 
 ```bash
 cd /home/vagrant
@@ -419,10 +616,35 @@ cmake -D CMAKE_CXX_COMPILER=g++ \
 -D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
 -D RDK_INSTALL_INTREE=OFF ..
 ```
-For CentOS 6.X replace PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so by
-PYTHON_LIBRARY=/usr/lib64/libpython3.4m.so
+
+CentOS 6.X with compiled libraries installed in /usr/local/lib and source in /usr/local/include:
+
+```bash
+cd /home/vagrant
+wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
+tar -xvzf Release_2016_03_1.tar.gz
+cd rdkit-Release_2016_03_1
+export RDBASE=$(pwd)
+export PYTHONPATH=$RDBASE:$PYTHONPATH
+export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
+mkdir build
+cd build
+cmake -D CMAKE_CXX_COMPILER=g++ \
+-D CMAKE_C_COMPILER=gcc \
+-D RDK_BUILD_SWIG_WRAPPERS=OFF \
+-D PYTHON_LIBRARY=/usr/lib64/libpython3.4m.so \
+-D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+-D PYTHON_EXECUTABLE=/env/bin/python3 \
+-D RDK_BUILD_AVALON_SUPPORT=ON \
+-D RDK_BUILD_INCHI_SUPPORT=ON \
+-D RDK_BUILD_PYTHON_WRAPPERS=ON \
+-D BOOST_ROOT=/usr/local/ \
+-D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
+-D RDK_INSTALL_INTREE=OFF ..
+```
+Notice differences in PYTHON_LIBRARY and BOOST_ROOT variables.
     
-######  5. Install RDKit:
+######  6. Install RDKit:
 
 ```bash     
 cd $RDBASE/build
@@ -430,13 +652,13 @@ sudo make -j2 install
 sudo ldconfig
 ```
     
-######  6. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
+######  7. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
 
 ```bash            
 exit
 ```
     
-######  7. Restore VM memory configuration:
+######  8. Restore VM memory configuration:
 ####### a. Stop vagrant VM:
 From a cmd.exe:
 
@@ -460,7 +682,7 @@ config.vm.provider :virtualbox do |vb|
 end
 ```
 
-######  8. Restart the VM and log into it:
+######  9. Restart the VM and log into it:
 From a cmd.exe:
 
 ```batch
@@ -470,15 +692,12 @@ vagrant up
 
 and open an SSH connection to Vagrant VM.
 
-######  9. Optional. Test the installation:
+######  10. Optional. Test the installation:
      
-####### a. Replace 'python' command by '/env/bin/python3':
+####### a. Activate python environment:
 
 ```bash
-mkdir /home/vagrant/bin
-ln -s /env/bin/python3 /home/vagrant/bin/python
-export PATH=/home/vagrant/bin:$PATH
-cd $RDBASE/build
+source /env/bin/activate
 ```
     
 ####### b. Run test:
@@ -489,22 +708,10 @@ cd $RDBASE/build
 ctest
 ```
     
-####### c. Remove link:
+####### c. Deactivate python environment:
 
 ```bash         
-rm /home/vagrant/bin/python
-```
-    
-####### d. Log out from SSH session in order to clean PATH:
-
-```bash         
-exit
-```
-    
-####### e. Log into the vagrant VM:
-
-```bash         
-vagrant ssh
+deactivate
 ```
     
 ##### Start the Django development webserver
