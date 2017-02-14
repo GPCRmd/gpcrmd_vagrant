@@ -172,14 +172,15 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization
     ```
         
-4. Add line the following line after 'import python;' (NOT inside the if body) in project-config.jam:
+4. Add the following line after 'import python;' (NOT inside the if body) in project-config.jam:
 
     Ubuntu:
 
     ```diff
     # Python configuration
     import python ;
-    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;'
+    # DO NOT INCLUDE '+'
+    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;
     if ! [ python.configured ]
     {
         using python : 3.4 : /env ;
@@ -191,7 +192,8 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     ```diff
     # Python configuration
     import python ;
-    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib64/ ;'
+    # DO NOT INCLUDE '++'
+    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /usr/lib64/ ;
     if ! [ python.configured ]
     {
         using python : 3.4 : /env ;
@@ -207,7 +209,7 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
 6. Add libraries in "/usr/local/lib" to ldconfig (add line "/usr/local/lib" to /etc/ld.so.conf if necessary):
    
     ```bash
-        sudo ldconfig
+    sudo ldconfig
     ```
 
 ######  3. Install OpenBabel:
@@ -516,14 +518,15 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization
     ```
         
-4. Add line the following line after 'import python;' (NOT inside the if body) in project-config.jam:
+4. Add the following line after 'import python;' (NOT inside the if body) in project-config.jam:
 
     Ubuntu:
 
     ```diff
     # Python configuration
     import python ;
-    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;'
+    # DO NOT INCLUDE '+'
+    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;
     if ! [ python.configured ]
     {
         using python : 3.4 : /env ;
@@ -535,7 +538,8 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     ```diff
     # Python configuration
     import python ;
-    ++  'using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib64/ ;'
+    # DO NOT INCLUDE '+'
+    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /usr/lib64/ ;
     if ! [ python.configured ]
     {
         using python : 3.4 : /env ;
@@ -551,7 +555,7 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
 6. Add libraries in "/usr/local/lib" to ldconfig (add line "/usr/local/lib" to /etc/ld.so.conf if necessary):
    
     ```bash
-        sudo ldconfig
+    sudo ldconfig
     ```
 
 ######  3. Install OpenBabel:
