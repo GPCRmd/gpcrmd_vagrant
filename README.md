@@ -97,277 +97,6 @@ tar -xvzf your/download/folder/files.tar.gz -C ~/gpcrmd_vagrant/shared/sites/
 ```bash
 vagrant ssh
 ```
-
-
-##### Install RDKit and OpenBabel in the VM
-######  1. Increase VM memory temporary:
-####### a. Stop vagrant VM:
-
-From a new terminal:
-
-```bash
-cd ~/gpcrmd_vagrant
-vagrant halt
-```
-
-####### b. Edit Vagrantfile:
-
-Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2560 MB at least:
-
-```diff
-# Allocate resources
-config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
--   vb.customize ["modifyvm", :id, "--memory", "2048"]
-+   vb.customize ["modifyvm", :id, "--memory", "2560"]
-    vb.customize ["modifyvm", :id, "--cpus", "2"]
-end
-```
-
-Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
-
-####### c. Restart the VM and log into it:
-    
-```bash
-vagrant up
-vagrant ssh
-```
-
-######  2. Install dependences:
-
-Ubuntu:
-
-```bash
-sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev 
-sudo apt-get install zlib1g-dev tcl8.5-dev tk8.5-dev
-sudo apt-get install python3.4 python3.4-dev python3-tk
-# Boost library
-# libboost-python1.54-dev contains libraries for both python2 and python3
-sudo apt-get install libboost1.54-dev libboost-system1.54-dev libboost-thread1.54-dev
-sudo apt-get install libboost-serialization1.54-dev libboost-python1.54-dev libboost-regex1.54-dev
-# For pip3 cairocffi:
-sudo apt-get install libffi6 libffi-dev libtiff4-dev libfreetype6-dev libjpeg8-dev liblcms2-dev libwebp-dev
-
-```
-
-CentOS 6.X+ with EPEL repository enabled:
-
-```bash
-sudo yum install @"Development Tools"  cmake tk-devel readline-devel zlib-devel bzip2-devel sqlite-devel python34-devel
-# For pip3 cairocffi:
-sudo yum install libffi libffi-devel
-```
-CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from source.
-
-####### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
-1. Download Boost library 1.61.0: https://sourceforge.net/projects/boost/files/boost/1.61.0/
-2. Extract the boost_1_61_0 folder fromthe downloaded file:
-
-    ```bash
-    tar -jxvf boost_1_61_0.tar.bz2
-    ```
-        
-3. Configure build:
-        
-    ```bash
-    cd boost_1_61_0
-    ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization
-    ```
-        
-4. Add the following line after 'import python;' (NOT inside the if body) in project-config.jam:
-
-    Ubuntu:
-
-    ```diff
-    # Python configuration
-    import python ;
-    # DO NOT INCLUDE '+'
-    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;
-    if ! [ python.configured ]
-    {
-        using python : 3.4 : /env ;
-    }
-    ```
-        
-    CentOS 6.X:
- 
-    ```diff
-    # Python configuration
-    import python ;
-    # DO NOT INCLUDE '++'
-    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /usr/lib64/ ;
-    if ! [ python.configured ]
-    {
-        using python : 3.4 : /env ;
-    }
-    ``` 
- 
-5. Compile boost:
-    
-    ```bash
-    sudo ./b2 install -a cxxflags=-fPIC cflags=-fPIC # Flags for enabling shared and static linking
-    ```
-        
-6. Add libraries in "/usr/local/lib" to ldconfig (add line "/usr/local/lib" to /etc/ld.so.conf if necessary):
-   
-    ```bash
-    sudo ldconfig
-    ```
-
-######  3. Install OpenBabel:
-    
-Ubuntu:    
-```bash
-sudo apt-get install openbabel
-```
- Centos 6.X+ with EPEL repository enabled:
- ```bash
-yum install openbabel
-```
-
-######  4. Install pip packages dependences
-
-####### a. Install numpy:
-
-```bash
-sudo /env/bin/pip3 install numpy==1.11
-```
-
-####### b. Install cairo:
-
-
-```bash
-sudo /env/bin/pip3 install cairocffi
-```
-
-
-####### c. Install Pillow:
-
-
-```bash
-sudo /env/bin/pip3 install Pillow
-```
-
-    
-######  5. Download and compile RDKit:
-
-Ubuntu with Boost C++ from repository:
-
-```bash
-cd /home/vagrant
-wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
-tar -xvzf Release_2016_03_1.tar.gz
-cd rdkit-Release_2016_03_1
-export RDBASE=$(pwd)
-export PYTHONPATH=$RDBASE:$PYTHONPATH
-export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
-mkdir build
-cd build
-cmake -D CMAKE_CXX_COMPILER=g++ \
--D CMAKE_C_COMPILER=gcc \
--D RDK_BUILD_SWIG_WRAPPERS=OFF \
--D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
--D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
--D PYTHON_EXECUTABLE=/env/bin/python3 \
--D RDK_BUILD_AVALON_SUPPORT=ON \
--D RDK_BUILD_INCHI_SUPPORT=ON \
--D RDK_BUILD_PYTHON_WRAPPERS=ON \
--D BOOST_ROOT=/usr/ \
--D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
--D RDK_INSTALL_INTREE=OFF ..
-```
-
-CentOS 6.X with compiled libraries installed in /usr/local/lib and source in /usr/local/include:
-
-```bash
-cd /home/vagrant
-wget https://github.com/rdkit/rdkit/archive/Release_2016_03_1.tar.gz
-tar -xvzf Release_2016_03_1.tar.gz
-cd rdkit-Release_2016_03_1
-export RDBASE=$(pwd)
-export PYTHONPATH=$RDBASE:$PYTHONPATH
-export LD_LIBRARY_PATH=$RDBASE/lib:$LD_LIBRARY_PATH
-mkdir build
-cd build
-cmake -D CMAKE_CXX_COMPILER=g++ \
--D CMAKE_C_COMPILER=gcc \
--D RDK_BUILD_SWIG_WRAPPERS=OFF \
--D PYTHON_LIBRARY=/usr/lib64/libpython3.4m.so \
--D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
--D PYTHON_EXECUTABLE=/env/bin/python3 \
--D RDK_BUILD_AVALON_SUPPORT=ON \
--D RDK_BUILD_INCHI_SUPPORT=ON \
--D RDK_BUILD_PYTHON_WRAPPERS=ON \
--D BOOST_ROOT=/usr/local/ \
--D PYTHON_INSTDIR=/env/lib/python3.4/site-packages/ \
--D RDK_INSTALL_INTREE=OFF ..
-```
-Notice differences in PYTHON_LIBRARY and BOOST_ROOT variables.
- 
-######  6. Install RDKit:
-
-```bash
-cd $RDBASE/build
-sudo make -j2 install
-sudo ldconfig
-```
-         
-######  7. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
-
-```bash            
-exit
-```  
-    
-######  8. Restore VM memory configuration:
-####### a. Stop vagrant VM:
-
-```bash
-vagrant halt
-```
-
-####### b. Edit Vagrantfile:
-
-Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' and replace the memory setting to 2048 MB or 
-the amount that you had previous to step 1:
-
-```diff
-# Allocate resources
-config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
--   vb.customize ["modifyvm", :id, "--memory", "2560"]
-+   vb.customize ["modifyvm", :id, "--memory", "2048"]
-    vb.customize ["modifyvm", :id, "--cpus", "2"]
-end
-```
-
-######  9. Restart the VM and log into it:
-
-```bash
- vagrant up
- vagrant ssh
-```
-    
-######  10. Optional. Test the installation:
-     
-####### a. Activate python environment:
-
-```bash
-source /env/bin/activate
-```
-    
-####### b. Run test:
-
-```bash     
-export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
-cd $RDBASE/build
-ctest
-```
-    
-####### c. Deactivate python environment:
-
-```bash         
-deactivate
-```
     
 ##### Start the built in Django development webserver
 
@@ -441,19 +170,59 @@ Use an SSH client, e.g. PuTTY, with the following settings
     password: vagrant
 
     
-##### Install RDKit and OpenBabel in the VM
+    
+##### Start the Django development webserver
 
-######  1. Increase VM memory temporary:
-####### a. Stop vagrant VM:
+```bash
+cd /protwis/sites/protwis
+/env/bin/python3 manage.py runserver 0.0.0.0:8000
+```
+    
+You're all set up. The webserver will now be accessible from http://localhost:8000
 
-From a new cmd.exe:
+#### Other notes
+
+The protwis directory is now shared between the host machine and the virtual machine, and any changes made on the host
+machine will be instantly reflected on the server.
+
+To run django commands from the protwis directory, ssh into the VM, and use the "/env/bin/python3" command e.g
+
+```bash
+cd ~/gpcrmd_vagrant/
+vagrant ssh
+cd /protwis/sites/protwis
+/env/bin/python3 manage.py check protein
+```
+    
+The database administration tool Adminer is installed and accessible at http://localhost:8082/adminer. Use the
+following settings
+
+    System: PostgreSQL
+    Server: localhost
+    Username: protwis
+    Password: protwis
+
+#### Install RDKit and OpenBabel in the VM (already done in Ubuntu)
+
+#####  1. Increase VM memory temporary:
+###### a. Stop vagrant VM:
+
+Linux host from a new terminal:
+
+```bash
+cd ~/gpcrmd_vagrant
+vagrant halt
+```
+
+
+Windows host from a new cmd.exe:
 
 ```batch
 cd %HOMEPATH%\gpcrmd_vagrant
 vagrant halt
 ```
 
-####### b. Edit Vagrantfile:
+###### b. Edit Vagrantfile:
 
 Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2560 MB at least:
 
@@ -469,7 +238,9 @@ end
 
 Otherwise compilation of RDKit could fail. This requirement is only needed for compilation, not for running the server.
 
-####### c. Restart the VM and log into it:
+###### c. Restart the VM and log into it:
+
+Windows host:
 
 From a cmd.exe:
 
@@ -481,9 +252,9 @@ vagrant up
 and open an SSH connection to Vagrant VM.
 
 
-######  2. Install dependences:
+#####  2. Install dependences:
 
-Ubuntu:
+###### Ubuntu:
 
 ```bash
 sudo apt-get install build-essential cmake sqlite3 libsqlite3-dev 
@@ -498,7 +269,7 @@ sudo apt-get install libffi6 libffi-dev libtiff4-dev libfreetype6-dev libjpeg8-d
 
 ```
 
-CentOS 6.X+ with EPEL repository enabled:
+###### CentOS 6.X+ with EPEL repository enabled:
 
 ```bash
 sudo yum install @"Development Tools"  cmake tk-devel readline-devel zlib-devel bzip2-devel sqlite-devel python34-devel
@@ -507,7 +278,7 @@ sudo yum install libffi libffi-devel
 ```
 CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from source.
 
-####### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
+###### a. Compile Boost C++ library (>= 1.45, tested with 1.61):
 1. Download Boost library 1.61.0: https://sourceforge.net/projects/boost/files/boost/1.61.0/
 2. Extract the boost_1_61_0 folder fromthe downloaded file:
 
@@ -562,26 +333,26 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     sudo ldconfig
     ```
 
-######  3. Install OpenBabel:
+#####  3. Install OpenBabel:
     
-Ubuntu:    
+###### Ubuntu:    
 ```bash
 sudo apt-get install openbabel
 ```
- Centos 6.X+ with EPEL repository enabled:
+###### Centos 6.X+ with EPEL repository enabled:
  ```bash
 yum install openbabel
 ```
 
-######  4. Install pip packages dependences
+#####  4. Install pip packages dependences
 
-####### a. Install numpy:
+###### a. Install numpy:
 
 ```bash
 sudo /env/bin/pip3 install numpy==1.11
 ```
 
-####### b. Install cairo:
+###### b. Install cairo:
 
 
 ```bash
@@ -589,7 +360,7 @@ sudo /env/bin/pip3 install cairocffi
 ```
 
 
-####### c. Install Pillow:
+###### c. Install Pillow:
 
 
 ```bash
@@ -597,9 +368,9 @@ sudo /env/bin/pip3 install Pillow
 ```
 
     
-######  5. Download and compile RDKit:
+#####  5. Download and compile RDKit:
 
-Ubuntu with Boost C++ from repository:
+###### Ubuntu with Boost C++ from repository:
 
 ```bash
 cd /home/vagrant
@@ -625,7 +396,7 @@ cmake -D CMAKE_CXX_COMPILER=g++ \
 -D RDK_INSTALL_INTREE=OFF ..
 ```
 
-CentOS 6.X with compiled libraries installed in /usr/local/lib and source in /usr/local/include:
+###### CentOS 6.X with compiled libraries installed in /usr/local/lib and source in /usr/local/include:
 
 ```bash
 cd /home/vagrant
@@ -652,7 +423,7 @@ cmake -D CMAKE_CXX_COMPILER=g++ \
 ```
 Notice differences in PYTHON_LIBRARY and BOOST_ROOT variables.
     
-######  6. Install RDKit:
+#####  6. Install RDKit:
 
 ```bash     
 cd $RDBASE/build
@@ -660,24 +431,34 @@ sudo make -j2 install
 sudo ldconfig
 ```
     
-######  7. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
+#####  7. Log out from SSH session in order to clean LD_LIBRARY_PATH and PYTHONPATH:
 
 ```bash            
 exit
 ```
     
-######  8. Restore VM memory configuration:
-####### a. Stop vagrant VM:
-From a cmd.exe:
+#####  8. Restore VM memory configuration:
+###### a. Stop vagrant VM:
+
+Windows host from a cmd.exe:
 
 ```batch
 cd %HOMEPATH%\gpcrmd_vagrant
 vagrant halt
 ```
 
-####### b. Edit Vagrantfile:
 
-Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' and replace the memory setting to 2048 MB or 
+Linux host from a terminal:
+
+```batch
+cd ~/gpcrmd_vagrant
+vagrant halt
+```
+
+
+###### b. Edit Vagrantfile:
+
+Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' (windows) or '~/gpcrmd_vagrant/Vagrantfile' (linux) and replace the memory setting to 2048 MB or 
 the amount that you had previous to step 1:
 
 ```diff
@@ -690,7 +471,10 @@ config.vm.provider :virtualbox do |vb|
 end
 ```
 
-######  9. Restart the VM and log into it:
+#####  9. Restart the VM and log into it:
+
+###### Windows host:
+
 From a cmd.exe:
 
 ```batch
@@ -698,17 +482,26 @@ cd %HOMEPATH%\gpcrmd_vagrant
 vagrant up
 ```
 
+###### Linux host:
+
+From a terminal:
+
+```batch
+cd ~/gpcrmd_vagrant
+vagrant up
+```
+
 and open an SSH connection to Vagrant VM.
 
-######  10. Optional. Test the installation:
+#####  10. Optional. Test the installation:
      
-####### a. Activate python environment:
+###### a. Activate python environment:
 
 ```bash
 source /env/bin/activate
 ```
     
-####### b. Run test:
+###### b. Run test:
 
 ```bash     
 export RDBASE=/home/vagrant/rdkit-Release_2016_03_1
@@ -716,44 +509,14 @@ cd $RDBASE/build
 ctest
 ```
     
-####### c. Deactivate python environment:
+###### c. Deactivate python environment:
 
 ```bash         
 deactivate
 ```
-    
-##### Start the Django development webserver
 
-```bash
-cd /protwis/sites/protwis
-/env/bin/python3 manage.py runserver 0.0.0.0:8000
-```
-    
-You're all set up. The webserver will now be accessible from http://localhost:8000
-
-#### Other notes
-
-The protwis directory is now shared between the host machine and the virtual machine, and any changes made on the host
-machine will be instantly reflected on the server.
-
-To run django commands from the protwis directory, ssh into the VM, and use the "/env/bin/python3" command e.g
-
-```bash
-cd ~/gpcrmd_vagrant/
-vagrant ssh
-cd /protwis/sites/protwis
-/env/bin/python3 manage.py check protein
-```
-    
-The database administration tool Adminer is installed and accessible at http://localhost:8082/adminer. Use the
-following settings
-
-    System: PostgreSQL
-    Server: localhost
-    Username: protwis
-    Password: protwis
-
-##### Installing haystack
+##### Installing haystack (already done in Ubuntu)
+###### Steps for Ubuntu:
 Haystack provides modular search for Django. It features a unified, familiar API that allows you to plug in different search backends (such as Solr, Elasticsearch, Whoosh, Xapian, etc.).
 
 It is required for our query search engine. Run the following steps in a VM terminal (e.g. vagrant ssh) in order to setup Haystack:
@@ -817,7 +580,7 @@ It is required for our query search engine. Run the following steps in a VM term
     /env/bin/python3 manage.py rebuild_index
     ```
 
-##### Installing mdsrv and preparing apache WSGI for production
+##### Installing mdsrv and preparing apache WSGI for production (already done by puppet)
 
 0. Get the last version of the Vagrantfile. Run in your computer terminal:
     
