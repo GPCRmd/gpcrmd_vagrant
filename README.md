@@ -61,14 +61,6 @@ cd ~/gpcrmd_vagrant
 git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
 ```
 
-##### Start the vagrant box
-
-This may take a few minutes
-
-```bash
-vagrant up
-```
-    
 ##### Download scripts and latest dump
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
@@ -78,6 +70,16 @@ vagrant up
 ```bash
 ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
 ```
+
+##### Start the vagrant box
+
+This may take a few minutes
+
+```bash
+vagrant up
+```
+    
+
 
 ##### Download example files
 
@@ -406,7 +408,13 @@ Or with writting permissions
 cd %HOMEPATH%\gpcrmd_vagrant
 git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
 ```
-    
+
+##### Download scripts and latest dump
+
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
+2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
+3.  Rename dumpddmmyyyy.backup to 'dump.backup'.
+
 ##### Start the vagrant box
 
 This may take a few minutes
@@ -415,11 +423,7 @@ This may take a few minutes
 vagrant up
 ```
     
-##### Download scripts and latest dump
 
-1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
-2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
-3.  Rename dumpddmmyyyy.backup to 'dump.backup'.
 
 ##### Download example files
 
