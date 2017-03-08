@@ -682,7 +682,43 @@ It is required for our query search engine. Run the following steps in a VM term
    ```bash
    /etc/init.d/httpd restart
    ```
+
    
+#### Update for enabling permission system
+
+1. Install apache2 mod_xsendfile plugin:
+
+    Ubuntu:
+    
+    ```bash
+    sudo apt-get install libapache2-mod-xsendfile
+    ```   
+
+    CentOs:
+    
+    ```bash
+    sudo yum install mod_xsendfile
+    ```
+
+2. Install django-sendfile pip package:
+    
+    ```bash
+    sudo /env/bin/pip3 install django-sendfile
+    ```
+3. Install django-revproxy pip package:
+
+    ```bash
+    sudo /env/bin/pip3 install django-revproxy
+    ```
+4. Change the following parameter in settings.py for proxy protecting the NGL viewer:
+
+    ```diff
+    -   MDSRV_PORT=8081
+    +   MDSRV_PORT=80
+    ```
+    
+
+
 #### Setting up Django for production
 
 1. Replace the following line in protwis/settings.py:
