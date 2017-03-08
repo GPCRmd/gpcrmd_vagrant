@@ -141,7 +141,7 @@ git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
 ##### Download scripts and latest dump
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'prepare.sql' and the last dumpddmmyyyy.backup .
-2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
+2.  Copy files into next folder: '%HOMEPATH%\gpcrmd_vagrant\shared\db\'.
 3.  Rename dumpddmmyyyy.backup to 'dump.backup'.
 
 ##### Start the vagrant box
@@ -157,7 +157,7 @@ vagrant up
 ##### Download example files
 
 1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases 'files.tar.gz'.
-2.  Extract files.tar.gz into '~/gpcrmd_vagrant/shared/sites/' with your favourite compression software.
+2.  Extract files.tar.gz into '%HOMEPATH%\gpcrmd_vagrant\shared\sites\' with your favourite compression software.
     We recommend [7-zip](http://www.7-zip.org/).
 
 ##### Log into the vagrant VM
@@ -240,9 +240,14 @@ Otherwise compilation of RDKit could fail. This requirement is only needed for c
 
 ###### c. Restart the VM and log into it:
 
-Windows host:
+Linux and Mac hosts from a terminal:
 
-From a cmd.exe:
+```batch
+cd %HOMEPATH%\gpcrmd_vagrant
+vagrant up
+```
+
+Windows host from a cmd.exe:
 
 ```batch
 cd %HOMEPATH%\gpcrmd_vagrant
@@ -440,18 +445,17 @@ exit
 #####  8. Restore VM memory configuration:
 ###### a. Stop vagrant VM:
 
+Linux and Mac hosts from a terminal:
+
+```batch
+cd ~/gpcrmd_vagrant
+vagrant halt
+```
+
 Windows host from a cmd.exe:
 
 ```batch
 cd %HOMEPATH%\gpcrmd_vagrant
-vagrant halt
-```
-
-
-Linux host from a terminal:
-
-```batch
-cd ~/gpcrmd_vagrant
 vagrant halt
 ```
 
@@ -473,6 +477,15 @@ end
 
 #####  9. Restart the VM and log into it:
 
+###### Linux and Mac hosts:
+
+From a terminal:
+
+```batch
+cd ~/gpcrmd_vagrant
+vagrant up
+```
+
 ###### Windows host:
 
 From a cmd.exe:
@@ -482,14 +495,6 @@ cd %HOMEPATH%\gpcrmd_vagrant
 vagrant up
 ```
 
-###### Linux host:
-
-From a terminal:
-
-```batch
-cd ~/gpcrmd_vagrant
-vagrant up
-```
 
 and open an SSH connection to Vagrant VM.
 
@@ -515,8 +520,8 @@ ctest
 deactivate
 ```
 
-##### Installing haystack (already done in Ubuntu)
-###### Steps for Ubuntu:
+#### Installing haystack (already done in Ubuntu)
+##### Steps for Ubuntu:
 Haystack provides modular search for Django. It features a unified, familiar API that allows you to plug in different search backends (such as Solr, Elasticsearch, Whoosh, Xapian, etc.).
 
 It is required for our query search engine. Run the following steps in a VM terminal (e.g. vagrant ssh) in order to setup Haystack:
@@ -580,7 +585,7 @@ It is required for our query search engine. Run the following steps in a VM term
     /env/bin/python3 manage.py rebuild_index
     ```
 
-##### Installing mdsrv and preparing apache WSGI for production (already done by puppet)
+#### Installing mdsrv and preparing apache WSGI for production (already done by puppet)
 
 0. Get the last version of the Vagrantfile. Run in your computer terminal:
     
@@ -678,7 +683,7 @@ It is required for our query search engine. Run the following steps in a VM term
    /etc/init.d/httpd restart
    ```
    
-##### Setting up Django for production
+#### Setting up Django for production
 
 1. Replace the following line in protwis/settings.py:
    
