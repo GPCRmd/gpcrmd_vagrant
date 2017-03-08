@@ -462,7 +462,7 @@ vagrant halt
 
 ###### b. Edit Vagrantfile:
 
-Open Vagrant file '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' (windows) or '~/gpcrmd_vagrant/Vagrantfile' (linux) and replace the memory setting to 2048 MB or 
+Open Vagrant file '~/gpcrmd_vagrant/Vagrantfile' (linux or mac) or '%HOMEPATH%\gpcrmd_vagrant\Vagrantfile' (windows) and replace the memory setting to 2048 MB or 
 the amount that you had previous to step 1:
 
 ```diff
@@ -686,7 +686,7 @@ It is required for our query search engine. Run the following steps in a VM term
    
 #### Update for enabling permission system
 
-1. Install apache2 mod_xsendfile plugin:
+##### 1. Install apache2 mod_xsendfile plugin:
 
     Ubuntu:
     
@@ -700,17 +700,29 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo yum install mod_xsendfile
     ```
 
-2. Install django-sendfile pip package:
+##### 2. Install django-sendfile pip package:
     
     ```bash
     sudo /env/bin/pip3 install django-sendfile
     ```
-3. Install django-revproxy pip package:
+##### 3. Install django-revproxy pip package:
 
     ```bash
     sudo /env/bin/pip3 install django-revproxy
     ```
-4. Change the following parameter in settings.py for proxy protecting the NGL viewer:
+    
+##### 4. Update apache config:
+
+1. Open apache config file 'virtualhost' at  [here](https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/dev/apache/config/virtualhost) and save it at '~/gpcrmd_vagrant/shared/'(linux or mac) or '%HOMEPATH%\gpcrmd_vagrant\shared' (windows) as 'virtualhost'.
+
+2. In a VM terminal:
+    ```bash
+        sudo mv /protwis/virtualhost /etc/apache2/sites-available/000-default.conf
+        sudo service apache2 restart
+    ```
+   
+    
+##### 5. Change the following parameter in settings.py for proxy protecting the NGL viewer:
 
     ```diff
     -   MDSRV_PORT=8081
