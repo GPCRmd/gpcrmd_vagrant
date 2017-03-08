@@ -650,84 +650,85 @@ It is required for our query search engine. Run the following steps in a VM term
     
 5. Go to https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/master/apache/config/virtualhost and save the plain text web page into "~/gpcrmd_vagrant/shared". Then, run in vagrant VM terminal:
 
-   ```bash
-   cd /protwis
-   sudo mv virtualhost /etc/apache2/sites-available/000-default.conf 
-   # "virtualhost" is the name of the downloaded file 
-   ```
+    ```bash
+    cd /protwis
+    sudo mv virtualhost /etc/apache2/sites-available/000-default.conf 
+    # "virtualhost" is the name of the downloaded file 
+    ```
    
 6. Configure apache2 to listen to ports 80 and 8081. Edit the file "/etc/apache2/ports.conf":
 
-   ```bash
-   sudo vi /etc/apache2/ports.conf
-   ```
-   
-   Write the following two lines if they are missing and save the file:
-   
-   ```apache
-   Listen 80
-   Listen 8081
-   ```
+    ```bash
+    sudo vi /etc/apache2/ports.conf
+    ```
+
+    Write the following two lines if they are missing and save the file:
+
+    ```apache
+    Listen 80
+    Listen 8081
+    ```
    
 7. Restart apache2:
 
-   Debian:
+    Debian:
+
+    ```bash
+    sudo service apache2 restart
+    ```
    
-   ```bash
-   sudo service apache2 restart
-   ```
+    RedHat/CentOS:
    
-   RedHat/CentOS:
-   
-   ```bash
-   /etc/init.d/httpd restart
-   ```
+    ```bash
+    /etc/init.d/httpd restart
+    ```
 
    
 #### Update for enabling permission system
 
 ##### 1. Install apache2 mod_xsendfile plugin:
 
-    Ubuntu:
-    
-    ```bash
-    sudo apt-get install libapache2-mod-xsendfile
-    ```   
+Ubuntu:
 
-    CentOs:
-    
-    ```bash
-    sudo yum install mod_xsendfile
-    ```
+```bash
+sudo apt-get install libapache2-mod-xsendfile
+```   
+
+CentOs:
+
+```bash
+sudo yum install mod_xsendfile
+```
 
 ##### 2. Install django-sendfile pip package:
     
-    ```bash
-    sudo /env/bin/pip3 install django-sendfile
-    ```
+```bash
+sudo /env/bin/pip3 install django-sendfile
+```
+    
 ##### 3. Install django-revproxy pip package:
 
-    ```bash
-    sudo /env/bin/pip3 install django-revproxy
-    ```
+```bash
+sudo /env/bin/pip3 install django-revproxy
+```
     
 ##### 4. Update apache config:
 
 1. Open apache config file 'virtualhost' at  [here](https://github.com/GPCRmd/gpcrmd_puppet_modules/raw/dev/apache/config/virtualhost) and save it at '~/gpcrmd_vagrant/shared/'(linux or mac) or '%HOMEPATH%\gpcrmd_vagrant\shared' (windows) as 'virtualhost'.
 
 2. In a VM terminal:
+
     ```bash
-        sudo mv /protwis/virtualhost /etc/apache2/sites-available/000-default.conf
-        sudo service apache2 restart
+    sudo mv /protwis/virtualhost /etc/apache2/sites-available/000-default.conf
+    sudo service apache2 restart
     ```
-   
     
 ##### 5. Change the following parameter in settings.py for proxy protecting the NGL viewer:
 
-    ```diff
-    -   MDSRV_PORT=8081
-    +   MDSRV_PORT=80
-    ```
+```diff
+-   MDSRV_PORT=8081
++   MDSRV_PORT=80
+```
     
 
 
@@ -750,16 +751,17 @@ It is required for our query search engine. Run the following steps in a VM term
     cd /protwis/sites/protwis/
     /env/bin/python3 manage.py collectstatic --no-input
     ```
+
 3. Restart apache2:
 
-   Debian:
+    Debian:
    
-   ```bash
-   sudo service apache2 restart
-   ```
+    ```bash
+    sudo service apache2 restart
+    ```
    
-   RedHat/CentOS:
+    RedHat/CentOS:
    
-   ```bash
-   /etc/init.d/httpd restart
-   ```
+    ```bash
+    /etc/init.d/httpd restart
+    ```
