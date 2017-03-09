@@ -720,6 +720,9 @@ sudo /env/bin/pip3 install django-revproxy
 
     ```bash
     sudo mv /protwis/virtualhost /etc/apache2/sites-available/000-default.conf
+    sudo a2enmod rewrite
+    sudo a2enmod proxy
+    sudo a2enmod proxy_http
     sudo service apache2 restart
     ```
     
@@ -727,7 +730,17 @@ sudo /env/bin/pip3 install django-revproxy
 
 ```diff
 -   MDSRV_PORT=8081
-+   MDSRV_PORT=80
++   MDSRV_PORT=8000
+```
+
+##### 6. Give permissions to django debug server for reading MDsrv static files:
+
+```bash
+sudo chmod a+rx /var/www
+sudo chmod a+rx /var/www/mdsrv
+sudo chmod a+rx /var/www/mdsrv/
+sudo chmod a+rx /var/www/mdsrv/mdsrv
+sudo chmod -R a+rx /var/www/mdsrv/webapp
 ```
     
 
