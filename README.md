@@ -723,6 +723,7 @@ sudo /env/bin/pip3 install django-revproxy
 
     ```bash
     sudo mv /protwis/virtualhost /etc/apache2/sites-available/000-default.conf
+    sudo a2enmod xsendfile
     sudo a2enmod rewrite
     sudo a2enmod proxy
     sudo a2enmod proxy_http
