@@ -68,7 +68,7 @@ git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
 3.  In terminal run:
 
 ```bash
-ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
+ln -s ~/gpcrmd_vagrant/shared/db/[dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
 ```
 
 ##### Start the vagrant box
