@@ -68,6 +68,7 @@ git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
 3.  In terminal run:
 
 ```bash
+cd ~/gpcrmd_vagrant/shared/db/
 ln -s [dumpddmmyyyy].backup ~/gpcrmd_vagrant/shared/db/dump.backup
 ```
 
@@ -613,15 +614,16 @@ It is required for our query search engine. Run the following steps in a VM term
 1. Download last version of mdsrv and save it into "~/gpcrmd_vagrant/shared" from https://github.com/arose/mdsrv/releases. Then, run in vagrant VM terminal:
 
     ```bash
-    sudo tar -xvzf mdsrv.tar.gz -C /var/www/
+    sudo tar -xvzf mdsrv-X.X.tar.gz -C /var/www/
     sudo mv /var/www/mdsrv* /var/www/mdsrv
-    sudo chmod -R og+rX /var/www/mdsrv
+    sudo chmod -R a+rX /var/www/mdsrv
+    sudo chmod a+rX /var/www/
     cd /var/www/mdsrv
     sudo /env/bin/python setup.py install
     ```
-2. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/app.cfg (click on "raw" button) and saved it into "/protwis".
+2. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/app.cfg (click on "raw" button) and saved it into "~/gpcrmd_vagrant/shared".
 
-3. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/mdsrv.wsgi (click on "raw" button) and saved it into "/protwis".
+3. Download https://github.com/GPCRmd/gpcrmd_puppet_modules/blob/dev/mdsrv/config/mdsrv.wsgi (click on "raw" button) and saved it into "~/gpcrmd_vagrant/shared".
 
 4. Move the files downloaded in the previous two steps by running in vagrant VM terminal:
 
@@ -637,7 +639,8 @@ It is required for our query search engine. Run the following steps in a VM term
     sudo chgrp -R www-data /var/www/
     sudo chmod -R g+rX /var/www/
     sudo chmod -R g-w /var/www/
-    sudo chmod -R o-rwx /var/www/
+    sudo chmod -R o-w /var/www/
+    sudo chmod -R o+rX /var/www/
     ```
     
 4. Create a simlink to mdsrv_static:
@@ -720,6 +723,7 @@ sudo /env/bin/pip3 install django-revproxy
 
     ```bash
     sudo mv /protwis/virtualhost /etc/apache2/sites-available/000-default.conf
+    sudo a2enmod xsendfile
     sudo a2enmod rewrite
     sudo a2enmod proxy
     sudo a2enmod proxy_http
