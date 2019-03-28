@@ -19,12 +19,12 @@ Vagrant.configure("2") do |config|
     config.vm.box = "ubuntu/trusty64"
 
     # Forward ports
-    config.vm.network :forwarded_port, guest: 22, host: 2226, id: "ssh"
-    config.vm.network :forwarded_port, guest: 5432, host: 5432, id: "postgresql"
-    config.vm.network :forwarded_port, guest: 8000, host: 8000
-    config.vm.network :forwarded_port, guest: 80, host: 8001
-    config.vm.network :forwarded_port, guest: 8081, host: 8081
-    config.vm.network :forwarded_port, guest: 8082, host: 8082
+    config.vm.network :forwarded_port, guest: 22, host: 2226, id: "ssh", host_ip: "127.0.0.1"
+    config.vm.network :forwarded_port, guest: 5432, host: 5432, id: "postgresql", host_ip: "127.0.0.1"
+    config.vm.network :forwarded_port, guest: 8000, host: 8000, id: "django_webserver", host_ip: "127.0.0.1"
+    config.vm.network :forwarded_port, guest: 80, host: 8001, id: "apache", host_ip: "127.0.0.1"
+    config.vm.network :forwarded_port, guest: 8081, host: 8081, id: "apache_mdsrv", host_ip: "127.0.0.1"
+    config.vm.network :forwarded_port, guest: 8082, host: 8082, id: "apache_no_virtualhost",host_ip: "127.0.0.1"
 
     # Allocate resources
     config.vm.provider :virtualbox do |vb|
