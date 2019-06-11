@@ -63,7 +63,7 @@ git clone https://github.com/GPCRmd/gpcrdb.git shared/sites/protwis
 
 ##### Download scripts and latest dump
 
-1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases the last dumpddmmyyyy.backup .
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases the last dumpddmmyyyy.backup.
 2.  Copy files into next folder: '~/gpcrmd_vagrant/shared/db/'.
 3.  In terminal run:
 
@@ -141,7 +141,7 @@ git clone https://github.com/GPCRmd/gpcrdb.git shared\sites\protwis
 
 ##### Download scripts and latest dump
 
-1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases and the last dumpddmmyyyy.backup .
+1.  Download from https://github.com/GPCRmd/gpcrmd_data/releases and the last dumpddmmyyyy.backup.
 2.  Copy files into next folder: '%HOMEPATH%\gpcrmd_vagrant\shared\db\'.
 3.  Rename dumpddmmyyyy.backup to 'dump.backup'.
 
