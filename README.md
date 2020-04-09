@@ -202,6 +202,12 @@ following settings
     Server: localhost
     Username: protwis
     Password: protwis
+    
+If you experience problems with Virtualbox shared folders, use following command in your host machine to update guest additions in the VM:
+```bash
+cd ~/gpcrmd_vagrant/
+vagrant plugin install vagrant-vbguest
+```
 
 #### Install RDKit and OpenBabel in the VM (already done in Ubuntu)
 
