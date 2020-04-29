@@ -208,8 +208,9 @@ If you experience problems with Virtualbox shared folders, use following command
 cd ~/gpcrmd_vagrant/
 vagrant plugin install vagrant-vbguest
 ```
+### Developer documentation
 
-#### Install RDKit and OpenBabel in the VM (already done in Ubuntu)
+#### Hoew to install RDKit and OpenBabel in the VM (already done in Ubuntu)
 
 #####  1. Increase VM memory temporary:
 ###### a. Stop vagrant VM:
