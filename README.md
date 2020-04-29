@@ -210,7 +210,7 @@ vagrant plugin install vagrant-vbguest
 ```
 ### Developer documentation
 
-#### Hoew to install RDKit and OpenBabel in the VM (already done in Ubuntu)
+#### How to install RDKit and OpenBabel in the VM (already done in Ubuntu)
 
 #####  1. Increase VM memory temporary:
 ###### a. Stop vagrant VM:
