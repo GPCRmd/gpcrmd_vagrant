@@ -16,9 +16,13 @@
 Vagrant.configure("2") do |config|
 
     # Vagrant box to build off of.
-    config.vm.box = "ubuntu/trusty64"
-    #config.vm.box_version = "20160201.0.2"  # known version to work
+    # config.vm.box = "ubuntu/trusty64"
+    config.vm.box = "centos/7"
+
+    #config.vm.box_version = "20160201.0.2"  # ubuntu known version to work
     
+
+
     # Forward ports
     config.vm.network :forwarded_port, guest: 22, host: 2226, id: "ssh", host_ip: "127.0.0.1"
     config.vm.network :forwarded_port, guest: 5432, host: 5432, id: "postgresql", host_ip: "127.0.0.1"
@@ -34,26 +38,49 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
 
+    if config.vm.box == "ubuntu/trusty64"
+        $apache_group = "www-data"
+        $jetty_solr = true
+    elsif config.vm.box == "centos/7"
+        $apache_group = "apache"
+        $jetty_solr = false
+        $script = <<-SCRIPT
+        GROUP=#{$apache_group}; getent group $GROUP || groupadd $GROUP;
+        yum list installed puppetlabs-release || rpm -ivh https://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-12.noarch.rpm;
+        yum list installed puppet-server || yum install -y puppet-server
+        SCRIPT
+
+        config.vm.provision "prepare-box", type: "shell", privileged: true, before: :all,
+            inline: $script
+
+    end
+
+
+
+    #config.vm.provision "shell", privileged: true,
+    #    inline: "mkdir /protwis; chmod 775 /protwis; chown vagrant:#{apache_group} /protwis;"
     # Set up a shared directory
-    config.vm.synced_folder "shared", "/protwis/", :owner => "vagrant",
-    group: "www-data",
-    mount_options: ["dmode=775,fmode=664"]
-
-
+    config.vm.synced_folder "shared", "/protwis/", owner: "vagrant",
+    mount_options: ["dmode=775,fmode=664"], automount: false
     # copy puppet scripts to VM
-    config.vm.provision "file", source: "gpcrmd_puppet_modules", destination: "/protwis/conf/protwis_puppet_modules"
+    config.vm.provision "file", type:"file", source: "gpcrmd_puppet_modules",
+        destination: "/protwis/conf/protwis_puppet_modules"
 
     # Enable the Puppet provisioner
-    config.vm.provision :puppet do |puppet|
+    config.vm.provision "puppet", type:"puppet", after: "file" do |puppet|
         puppet.manifests_path = "manifests"
         puppet.manifest_file = "default.pp"
         puppet.module_path = "gpcrmd_puppet_modules"
     end
-    
-    # Start jetty
-    config.vm.provision "shell", run: "always" do |s|
-        s.inline = "/etc/init.d/jetty start"
-        s.privileged   = true
+
+
+
+    if $jetty_solr
+        # Start jetty
+        config.vm.provision "jetty", type: "shell", after: :all, run: "always" do |s|
+            s.inline = "/etc/init.d/jetty start"
+            s.privileged   = true
+        end
     end
 
 end
