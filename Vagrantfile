@@ -45,13 +45,21 @@ Vagrant.configure("2") do |config|
         $apache_group = "apache"
         $jetty_solr = false
         $script = <<-SCRIPT
-        GROUP=#{$apache_group}; getent group $GROUP || groupadd $GROUP;
         yum list installed puppetlabs-release || rpm -ivh https://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-12.noarch.rpm;
         yum list installed puppet-server || yum install -y puppet-server
         SCRIPT
 
+        $script2 = <<-SCRIPT
+        GROUP=#{$apache_group}; getent group $GROUP || groupadd $GROUP;
+        GROUP_ID=$(getent group $GROUP | cut -d: -f3);
+        umount /protwis;
+        mount -t vboxsf --options rw,nodev,relatime,iocharset=utf8,uid=1000,gid=${GROUP_ID},dmode=0775,fmode=0664 protwis_ /protwis;
+        SCRIPT
+
         config.vm.provision "prepare-box", type: "shell", privileged: true, before: :all,
             inline: $script
+        config.vm.provision "mount-protwis", type: "shell", privileged: true, before: :all,
+        run: "always", inline: $script2
 
     end
 
@@ -61,7 +69,7 @@ Vagrant.configure("2") do |config|
     #    inline: "mkdir /protwis; chmod 775 /protwis; chown vagrant:#{apache_group} /protwis;"
     # Set up a shared directory
     config.vm.synced_folder "shared", "/protwis/", owner: "vagrant",
-    mount_options: ["dmode=775,fmode=664"], automount: false
+    mount_options: ["dmode=775,fmode=664"], automount: true
     # copy puppet scripts to VM
     config.vm.provision "file", type:"file", source: "gpcrmd_puppet_modules",
         destination: "/protwis/conf/protwis_puppet_modules"
