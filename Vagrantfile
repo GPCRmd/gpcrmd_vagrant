@@ -15,6 +15,7 @@
 
 Vagrant.configure("2") do |config|
 
+    config.vagrant.plugins = ["vagrant-vbguest"]
     # Vagrant box to build off of.
     # config.vm.box = "ubuntu/trusty64"
     config.vm.box = "centos/7"
