@@ -307,7 +307,7 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     # Python configuration
     import python ;
     # DO NOT INCLUDE '+'
-    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;
+    +  using python : 3.4 : /env/bin/python3 : /usr/include/python3.4m : /env/lib/python3.4/config-3.4m-x86_64-linux-gnu/ ;
     if ! [ python.configured ]
     {
         using python : 3.4 : /env ;
@@ -320,7 +320,7 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
     # Python configuration
     import python ;
     # DO NOT INCLUDE '+'
-    +  using python : 3.4 : /env/bin/python3 : /env/include/python3.4m : /usr/lib64/ ;
+    +  using python : 3.4 : /env/bin/python3 : /usr/include/python3.4m : /usr/lib64/ ;
     if ! [ python.configured ]
     {
         using python : 3.4 : /env ;
