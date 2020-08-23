@@ -296,7 +296,7 @@ CentOS 6.X EPEL Boost C++ libraries are too old. You need to compile them from s
         
     ```bash
     cd boost_1_61_0
-    ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization
+    ./bootstrap.sh --with-python-version=3.4 --with-python=/env/bin/python3 --with-python-root=/env --with-libraries=python,regex,thread,serialization,system
     ```
         
 4. Add the following line after 'import python;' (NOT inside the if body) in project-config.jam:
@@ -392,7 +392,7 @@ cmake -D CMAKE_CXX_COMPILER=g++ \
 -D CMAKE_C_COMPILER=gcc \
 -D RDK_BUILD_SWIG_WRAPPERS=OFF \
 -D PYTHON_LIBRARY=/env/lib/python3.4/config-3.4m-x86_64-linux-gnu/libpython3.4m.so \
--D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+-D PYTHON_INCLUDE_DIR=/usr/include/python3.4m/ \
 -D PYTHON_EXECUTABLE=/env/bin/python3 \
 -D RDK_BUILD_AVALON_SUPPORT=ON \
 -D RDK_BUILD_INCHI_SUPPORT=ON \
@@ -418,7 +418,7 @@ cmake -D CMAKE_CXX_COMPILER=g++ \
 -D CMAKE_C_COMPILER=gcc \
 -D RDK_BUILD_SWIG_WRAPPERS=OFF \
 -D PYTHON_LIBRARY=/usr/lib64/libpython3.4m.so \
--D PYTHON_INCLUDE_DIR=/env/include/python3.4m/ \
+-D PYTHON_INCLUDE_DIR=/usr/include/python3.4m/ \
 -D PYTHON_EXECUTABLE=/env/bin/python3 \
 -D RDK_BUILD_AVALON_SUPPORT=ON \
 -D RDK_BUILD_INCHI_SUPPORT=ON \
