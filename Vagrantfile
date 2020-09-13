@@ -66,9 +66,8 @@ Vagrant.configure("2") do |config|
 
 
 
-    #config.vm.provision "shell", privileged: true,
-    #    inline: "mkdir /protwis; chmod 775 /protwis; chown vagrant:#{apache_group} /protwis;"
     # Set up a shared directory
+    config.vm.synced_folder '.', '/vagrant', disabled: true
     config.vm.synced_folder "shared", "/protwis/", owner: "vagrant",
     mount_options: ["dmode=775,fmode=664"], automount: true
     # copy puppet scripts to VM

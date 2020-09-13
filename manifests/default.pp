@@ -7,12 +7,13 @@ Exec {
 }
 
 include bootstrap
+include postgresql
 include python
 include apache
-include postgresql
 include import_db
 include adminer
 include solr
+include boost
 include rdkit
 include mdsrv
 include clean_cache
