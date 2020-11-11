@@ -35,8 +35,10 @@ Vagrant.configure("2") do |config|
     # Allocate resources
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--ioapic", "on"]
-        vb.customize ["modifyvm", :id, "--memory", "2560"]
+        vb.customize ["modifyvm", :id, "--memory", "5000"] #2560
         vb.customize ["modifyvm", :id, "--cpus", "2"]
+        vb.customize ["modifyvm", :id, "--paravirtprovider", "kvm"]
+        vb.default_nic_type = "virtio"
     end
 
     if config.vm.box == "ubuntu/trusty64"
@@ -53,6 +55,8 @@ Vagrant.configure("2") do |config|
         $script2 = <<-SCRIPT
         GROUP=#{$apache_group}; getent group $GROUP || groupadd $GROUP;
         GROUP_ID=$(getent group $GROUP | cut -d: -f3);
+        #chown -R vagrant:$GROUP /protwis;
+        #chmod -R 775 /protwis;
         umount /protwis;
         mount -t vboxsf --options rw,nodev,relatime,iocharset=utf8,uid=1000,gid=${GROUP_ID},dmode=0775,fmode=0664 protwis_ /protwis;
         SCRIPT
@@ -70,6 +74,8 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder '.', '/vagrant', disabled: true
     config.vm.synced_folder "shared", "/protwis/", owner: "vagrant",
     mount_options: ["dmode=775,fmode=664"], automount: true
+
+    
     # copy puppet scripts to VM
     config.vm.provision "file", type:"file", source: "gpcrmd_puppet_modules",
         destination: "/protwis/conf/protwis_puppet_modules"
